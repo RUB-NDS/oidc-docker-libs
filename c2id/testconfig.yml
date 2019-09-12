@@ -1,0 +1,4 @@
+DockerComposeFile: docker-compose.yml
+Tests:
+  - TestTargetName: Connect2id Server
+    TestConfigFile: professos_for_legacy_loginpage-js.json

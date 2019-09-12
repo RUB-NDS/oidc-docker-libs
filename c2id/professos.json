@@ -1,0 +1,9 @@
+{
+  "UrlOPTarget":"http://honest-idp.com:8080/c2id",
+  "User1Name":"alice",
+  "User2Name":"alice",
+  "User1Pass":"secret",
+  "User2Pass":"secret",
+  "LoginScript":"let user=document.querySelector('form input[ng-model=username]');\nlet pass=document.querySelector('form input[type=password]');\nuser.value = '§current_user_username§';\npass.value = '§current_user_password§';\nangular.element(user).triggerHandler('change');\nangular.element(pass).triggerHandler('change');\nangular.element(document.forms[0]).triggerHandler('submit');",
+  "ConsentScript": "document.forms[0].submit()"
+}

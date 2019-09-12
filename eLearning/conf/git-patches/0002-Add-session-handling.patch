@@ -1,0 +1,233 @@
+From 18a1d0655cd4b7c84ad4955e8b55f3fab38e268a Mon Sep 17 00:00:00 2001
+From: plokta <nils.engelbertz@rub.de>
+Date: Tue, 12 Mar 2019 17:50:55 +0100
+Subject: [PATCH 2/5] Add session handling
+
+* retrieve attackconfig by session
+* check response mode by session
+* implement SessionListener (fixes potential memory leak)
+---
+ .../sso/oidc/sp/database/AttackDatabase.java  | 46 +++++++++++++++++--
+ .../sso/oidc/sp/managers/AttackManager.java   | 26 +++++++++++
+ .../sp/managers/ConfigurationManager.java     |  5 ++
+ .../sso/oidc/sp/managers/VerifyManager.java   | 23 ++++++++--
+ .../sso/oidc/StartAttackServlet.java          |  2 +-
+ 5 files changed, 93 insertions(+), 9 deletions(-)
+
+diff --git a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/database/AttackDatabase.java b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/database/AttackDatabase.java
+index 934d142..7071821 100644
+--- a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/database/AttackDatabase.java
++++ b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/database/AttackDatabase.java
+@@ -3,13 +3,20 @@ package org.rub.nds.elearning.sso.oidc.sp.database;
+ import java.util.HashMap;
+ import java.util.Map;
+ 
++import org.apache.commons.collections4.BidiMap;
++import org.apache.commons.collections4.bidimap.DualHashBidiMap;
++
++import javax.servlet.http.HttpSessionEvent;
++import javax.servlet.http.HttpSessionListener;
++
++
+ /**
+  *
+  * @author vmladenov
+  */
+-
+-public class AttackDatabase {
++public class AttackDatabase implements HttpSessionListener {
+     private static Map<String,AttackConfig> db = new HashMap<>();
++    private static BidiMap<String, String> sessions = new DualHashBidiMap<>();
+     
+     public static void putEntry (String state, AttackConfig attackConfig){
+         db.put(state, attackConfig);
+@@ -19,8 +26,41 @@ public class AttackDatabase {
+         return db.get(state);
+     }
+     
++    public static void putSession(String sessionID, String state) {
++        sessions.put(sessionID, state);
++    }
++
++    public static String getStateBySession(String sessionId) {
++        return sessions.get(sessionId);
++    }
++
++    public static String getSessionByState(String state) {
++        return sessions.getKey(state);
++    }
++
++    public static AttackConfig getEntryBySession(String sessionId) {
++        String state = sessions.get(sessionId);
++        if ( state == null) {
++            return null;
++        }
++        return getEntry(state);
++    }
++
+     public static void deleteEntry (String state){
+         db.remove(state);
+     }
+-    
++
++    @Override
++    public void sessionCreated(HttpSessionEvent se) {
++        // we dont care...
++        return;
++    }
++
++    @Override
++    public void sessionDestroyed(HttpSessionEvent se) {
++        String id = se.getSession().getId();
++        String state = sessions.get(id);
++        sessions.remove(id);
++        deleteEntry(state);
++    }
+ }
+diff --git a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/AttackManager.java b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/AttackManager.java
+index 5386dfc..9446811 100644
+--- a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/AttackManager.java
++++ b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/AttackManager.java
+@@ -7,6 +7,7 @@ import com.nimbusds.oauth2.sdk.ResponseType.Value;
+ import com.nimbusds.oauth2.sdk.Scope;
+ import com.nimbusds.oauth2.sdk.http.HTTPRequest;
+ import com.nimbusds.oauth2.sdk.http.HTTPResponse;
++import com.nimbusds.oauth2.sdk.http.ServletUtils;
+ import com.nimbusds.oauth2.sdk.id.ClientID;
+ import com.nimbusds.oauth2.sdk.id.Issuer;
+ import com.nimbusds.oauth2.sdk.id.State;
+@@ -37,6 +38,7 @@ import org.rub.nds.elearning.sso.oidc.sp.exceptions.ClientNotFoundException;
+ import org.rub.nds.elearning.sso.oidc.sp.exceptions.IdPNotFoundException;
+ import org.rub.nds.elearning.sso.oidc.sp.misc.SP_Constants;
+ 
++
+ /**
+  *
+  * @author vmladenov
+@@ -74,7 +76,28 @@ public class AttackManager {
+         }
+     }
+ 
++    public static String startAuthentication(HTTPRequest request, String sessionId) {
++        try {
++            Map<String, String> params = request.getQueryParameters();
++            return startAuth(params, sessionId);
++        } catch (URISyntaxException | IOException | ParseException | IdPNotFoundException | ClientNotFoundException ex) {
++            HTTPResponse httpResponse = new HTTPResponse(400);
++            String errorMsg = SP_Constants.errorPage_prefix;
++            errorMsg = errorMsg.concat(ex.getClass().getCanonicalName());
++            errorMsg = errorMsg.concat(SP_Constants.errorPage_message);
++            errorMsg = errorMsg.concat(ex.getMessage());
++            errorMsg = errorMsg.concat(SP_Constants.errorPage_description);
++            httpResponse.setContent(errorMsg);
++            return errorMsg;
++        }
++    }
++
++
+     private static String startAuth(Map<String, String> params) throws IOException, ClientNotFoundException, IdPNotFoundException, ParseException, URISyntaxException {
++        return startAuth(params, null);
++    }
++
++    private static String startAuth(Map<String, String> params, String sessionID) throws IOException, ClientNotFoundException, IdPNotFoundException, ParseException, URISyntaxException {
+         AttackConfig config = new AttackConfig();
+         AttackRequest attackRequest = createAttackRequest(params);
+ 
+@@ -92,6 +115,9 @@ public class AttackManager {
+         config.setClient(getClientInfo(config));
+ 
+         AttackDatabase.putEntry(authReq.getState().getValue(), config);
++        if (sessionID != null) {
++            AttackDatabase.putSession(sessionID, authReq.getState().getValue());
++        }
+ 
+         return idpMetadata.getAuthorizationEndpointURI().toString() + "?" + authReq.toQueryString() + "&idp_verifier=" + attackRequest.getIdp_verifier();
+     }
+diff --git a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/ConfigurationManager.java b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/ConfigurationManager.java
+index d79341c..f84f7a2 100644
+--- a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/ConfigurationManager.java
++++ b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/ConfigurationManager.java
+@@ -16,9 +16,12 @@ import javax.net.ssl.X509TrustManager;
+ import javax.servlet.ServletContext;
+ import javax.servlet.ServletContextEvent;
+ import javax.servlet.ServletContextListener;
++import javax.servlet.http.HttpSessionListener;
+ import javax.xml.bind.JAXBContext;
+ import javax.xml.bind.JAXBException;
+ import javax.xml.bind.Unmarshaller;
++
++import org.rub.nds.elearning.sso.oidc.sp.database.AttackDatabase;
+ import org.rub.nds.elearning.sso.oidc.sp.database.ConfigDatabase;
+ import org.rub.nds.elearning.sso.oidc.sp.database.Configuration;
+ 
+@@ -34,6 +37,8 @@ public class ConfigurationManager implements ServletContextListener {
+     @Override
+     public void contextInitialized(ServletContextEvent sce) {
+         this.sce = sce;
++        // add HttpSessionListener (remove refs to AttackRequest from destroyed sessions)
++        this.sce.getServletContext().addListener(new AttackDatabase());
+         try {
+             cfgManager = this;
+             ectivateInsecureTLS();
+diff --git a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/VerifyManager.java b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/VerifyManager.java
+index 613682b..ce694e1 100644
+--- a/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/VerifyManager.java
++++ b/oidc/sp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/sp/managers/VerifyManager.java
+@@ -5,11 +5,7 @@ import com.nimbusds.jose.JWSAlgorithm;
+ import com.nimbusds.jose.proc.BadJOSEException;
+ import com.nimbusds.jose.util.DefaultResourceRetriever;
+ import com.nimbusds.jwt.JWT;
+-import com.nimbusds.oauth2.sdk.AuthorizationCode;
+-import com.nimbusds.oauth2.sdk.AuthorizationCodeGrant;
+-import com.nimbusds.oauth2.sdk.AuthorizationGrant;
+-import com.nimbusds.oauth2.sdk.ParseException;
+-import com.nimbusds.oauth2.sdk.TokenRequest;
++import com.nimbusds.oauth2.sdk.*;
+ import com.nimbusds.oauth2.sdk.auth.ClientAuthentication;
+ import com.nimbusds.oauth2.sdk.auth.ClientSecretPost;
+ import com.nimbusds.oauth2.sdk.auth.Secret;
+@@ -39,6 +35,8 @@ import org.rub.nds.elearning.sso.oidc.sp.exceptions.JWTVerificationException;
+ import org.rub.nds.elearning.sso.oidc.sp.misc.HTTPErrorResponse;
+ import org.rub.nds.elearning.sso.oidc.sp.misc.SP_Constants;
+ 
++import javax.servlet.http.HttpServletRequest;
++
+ /**
+  *
+  * @author vladi 
+@@ -267,4 +265,19 @@ public class VerifyManager {
+         }
+         return true;
+     }
++
++    public static boolean isSessionImpliesFragmentResponseMode(HttpServletRequest request) {
++        String id = request.getSession(false) != null ? request.getSession(false).getId() : "none";
++        AttackConfig config = AttackDatabase.getEntryBySession(id);
++        if (config == null) {
++            return false;
++        }
++        ResponseMode rm = config.getAuthReq().getResponseMode();
++        if (config.getAuthReq().getResponseType().toString().contains("token")  // matches id_token & token
++                && !ResponseMode.QUERY.equals(rm)) {
++            // TODO: this may be restricted to ResponseMode.FRAGMENT
++            return true;
++        }
++        return false;
++    }
+ }
+diff --git a/oidc/sp_webapp/src/main/java/org/rub/nds/elearning/sso/oidc/StartAttackServlet.java b/oidc/sp_webapp/src/main/java/org/rub/nds/elearning/sso/oidc/StartAttackServlet.java
+index ec05ff1..2aaa697 100644
+--- a/oidc/sp_webapp/src/main/java/org/rub/nds/elearning/sso/oidc/StartAttackServlet.java
++++ b/oidc/sp_webapp/src/main/java/org/rub/nds/elearning/sso/oidc/StartAttackServlet.java
+@@ -29,7 +29,7 @@ public class StartAttackServlet extends HttpServlet {
+             throws ServletException, IOException {
+         response.setContentType("text/html;charset=UTF-8");
+         request.getSession(true);
+-        String redirect_uri = AttackManager.startAuthentication(ServletUtils.createHTTPRequest(request));
++        String redirect_uri = AttackManager.startAuthentication(ServletUtils.createHTTPRequest(request), request.getSession().getId());
+         response.sendRedirect(redirect_uri);
+     }
+ 
+-- 
+2.17.1
+

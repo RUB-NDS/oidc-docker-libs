@@ -1,0 +1,8 @@
+DockerComposeFile: docker-compose.yml
+Tests:
+  - TestTargetName: mod_auth_oidc RP 
+    TestConfigFile: professos.json
+#  - TestTargetName: Testing a Singe TestStep
+#    TestConfigFile: professos.json
+#    TestStepsToRun:
+#      - "ID Spoofing 2"

@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  ruby_idp:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8282:8282"
+    networks:
+      professos_default:
+        aliases:
+          - honest-idp.com
+          - www.honest-idp.com
+
+networks:
+  professos_default:
+    external:
+      name: professos-default-net

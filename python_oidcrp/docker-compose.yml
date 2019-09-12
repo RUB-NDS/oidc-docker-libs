@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  python_oidcrp:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+      - "8090:8090"
+    networks:
+      professos_default:
+        aliases:
+          - honest-sp.com
+          - www.honest-sp.com
+
+networks:
+  professos_default:
+    external:
+      name: professos-default-net
+

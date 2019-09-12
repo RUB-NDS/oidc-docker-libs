@@ -1,0 +1,9 @@
+{
+  "UrlOPTarget":"http://honest-idp.com:8080/c2id",
+  "User1Name":"alice",
+  "User2Name":"bob",
+  "User1Pass":"secret",
+  "User2Pass":"secret",
+  "LoginScript":"let user = document.getElementById('login-username');\nlet pass = document.getElementById('login-password');\nuser.value = '§current_user_username§';\npass.value = '§current_user_password§';\n// set timeout as the default delay script does not work for this SPA\nsetTimeout(function(){document.getElementById('login-button').click()}, 500);",
+  "ConsentScript": "document.getElementById('consent-button').click()"
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<clientsType>
+    <client>
+            <client_id>client1</client_id>
+            <client_secret>secret-client1</client_secret>
+            <redirect_uri>http://honest-sp.com/oidc_sp/verify?next_url=/oidc_sp%2Ffaces%2Fsuccess%2Findex.xhtml</redirect_uri>
+            <consent_page>true</consent_page>
+        </client>
+        <client>
+            <client_id>client2</client_id>
+            <client_secret>secret-client2</client_secret>
+            <redirect_uri>http://honest-sp.com/oidc_sp/verify?next_url=/oidc_sp%2Ffaces%2Fsuccess%2Findex.xhtml</redirect_uri>
+            <consent_page>false</consent_page>
+        </client>
+        <client>
+            <client_id>evilClient</client_id>
+            <client_secret>secret-attacker-org</client_secret>
+            <redirect_uri>http://attacker.com/oidc_sp/verify?next_url=/oidc_sp%2Ffaces%2Fsuccess%2Findex.xhtml</redirect_uri>
+            <consent_page>true</consent_page>
+        </client>
+        <client>
+            <client_id>nativeApp</client_id>
+            <client_secret>secret-nativeApp</client_secret>
+            <redirect_uri>http://localhost:7777</redirect_uri>
+            <consent_page>true</consent_page>
+        </client>
+</clientsType>

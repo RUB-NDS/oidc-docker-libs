@@ -1,0 +1,8 @@
+Tests:
+  - TestTargetName: OIDC SP-Verifier 1 - eLearningSSO
+    TestConfigFile: professos.json
+  - TestTargetName: OIDC SP-Verifier 2 - eLearningSSO
+    TestConfigFile: verifier2.json
+  - TestTargetName: OIDC SP-Verifier 3 - eLearningSSO
+    TestConfigFile: verifier3.json
+DockerComposeFile: docker-compose.yml

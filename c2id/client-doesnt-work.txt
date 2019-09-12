@@ -1,0 +1,39 @@
+
+# c2id Demo Client Notes
+
+Could not get PrOfeSSOS to operate the c2id Demo Client. The client uses the Vaadin Framework and the page loads dynamically and has hardly any usable element IDs. The script snippet below seems to work when using it in the browser console, but fails when its used by Professos. 
+
+----
+
+```
+// make issuer field "visible"
+document.querySelector("#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div.v-accordion-item.v-accordion-item-first > div.v-accordion-item-caption > div").click()
+
+// set url
+document.getElementById("gwt-uid-16").value="§browser-input-op_url§"
+
+// click button to query provider configuration
+document.querySelector("#gwt-uid-18 > div:nth-child(1) > div").click()
+
+// make login button "visible"
+document.querySelector("#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div:nth-child(3) > div.v-accordion-item-caption > div").click()
+
+// click login button
+document.querySelector("#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div.v-accordion-item.v-accordion-item-open > div.v-accordion-item-content.v-scrollable > div > table > tbody > tr.v-formlayout-row.v-formlayout-lastrow > td.v-formlayout-contentcell > div > div > div").click()
+
+```
+
+### JSON formatted config
+
+
+```
+{
+    "UrlClientTarget": "http://honest-sp.com:8080/oidc-client/",
+    "InputFieldName": "",
+    "SeleniumScript": "// make issuer field \"visible\"\ndocument.querySelector(\"#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div.v-accordion-item.v-accordion-item-first > div.v-accordion-item-caption > div\").click()\n\n// set url\ndocument.getElementById(\"gwt-uid-16\").value=\"§browser-input-op_url§\"\n\n// click button to query provider configuration\ndocument.querySelector(\"#gwt-uid-18 > div:nth-child(1) > div\").click()\n\n// make login button \"visible\"\ndocument.querySelector(\"#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div:nth-child(3) > div.v-accordion-item-caption > div\").click()\n\n// click login button\ndocument.querySelector(\"#oidcclient-1945827556 > div > div.v-verticallayout.v-layout.v-vertical.v-widget.oidc-client.v-verticallayout-oidc-client.v-has-width.v-margin-top.v-margin-right.v-margin-bottom.v-margin-left > div:nth-child(2) > div > div.v-accordion-item.v-accordion-item-open > div.v-accordion-item-content.v-scrollable > div > table > tbody > tr.v-formlayout-row.v-formlayout-lastrow > td.v-formlayout-contentcell > div > div > div\").click()\n",
+    "FinalValidUrl": "https://demo.c2id.com/oidc-client/cb",
+    "HonestUserNeedle": "honest-op-test-subject",
+    "EvilUserNeedle": "evil-op-test-subject",
+    "ProfileUrl": "http://honest-sp.com:8080/oidc-client/cb"
+}
+```

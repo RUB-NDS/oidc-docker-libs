@@ -1,0 +1,14 @@
+{
+    "UrlOPTarget": "http://honest-idp.com:8000",
+    "OPMetadata": "",
+    "AccessToken1": "",
+    "AccessToken2": "",
+    "User1Name": "diana",
+    "User2Name": "upper",
+    "User1Pass": "krall",
+    "User2Pass": "crust",
+    "LoginScript": "var username = document.getElementById(\"username\");\nusername.value = \"§current_user_username§\";\n\nvar password = document.getElementById(\"password\");\npassword.value = \"§current_user_password§\";\ndocument.forms[0].submit();",
+    "ConsentScript": "var authBtn = document.confirmationForm.authorize\nauthBtn.click();\n",
+    "Client1Config": "",
+    "Client2Config": ""
+}

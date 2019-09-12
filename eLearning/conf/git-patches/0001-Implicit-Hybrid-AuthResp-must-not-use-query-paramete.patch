@@ -1,0 +1,33 @@
+From b6143e58feaca3eed39a3c893bcf1491187061ab Mon Sep 17 00:00:00 2001
+From: plokta <nils.engelbertz@rub.de>
+Date: Tue, 12 Mar 2019 17:46:19 +0100
+Subject: [PATCH 1/5] Implicit/Hybrid AuthResp must not use query parameters
+
+---
+ .../rub/nds/elearning/sso/oidc/idp/misc/TokenGenerator.java | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/oidc/idp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/idp/misc/TokenGenerator.java b/oidc/idp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/idp/misc/TokenGenerator.java
+index e88227f..9856a85 100644
+--- a/oidc/idp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/idp/misc/TokenGenerator.java
++++ b/oidc/idp_lib/src/main/java/org/rub/nds/elearning/sso/oidc/idp/misc/TokenGenerator.java
+@@ -89,13 +89,13 @@ public class TokenGenerator {
+             response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, null, null, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.QUERY);
+             TokenDB.putStoredInfo(code.getValue(), tokenInfo);
+         } else if (params.get(IdP_Constants.response_type_param).equals("code id_token")) {
+-            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, signedJWT, null, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.QUERY);
++            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, signedJWT, null, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.FRAGMENT);
+             TokenDB.putStoredInfo(code.getValue(), tokenInfo);
+         } else if (params.get(IdP_Constants.response_type_param).equals("code token")) {
+-            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, null, accessToken, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.QUERY);
++            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, null, accessToken, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.FRAGMENT);
+             TokenDB.putStoredInfo(code.getValue(), tokenInfo);
+         } else if (params.get(IdP_Constants.response_type_param).equals("code id_token token") || params.get(IdP_Constants.response_type_param).equals("code token id_token")) {
+-            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, signedJWT, accessToken, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.QUERY);
++            response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), code, signedJWT, accessToken, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.FRAGMENT);
+             TokenDB.putStoredInfo(code.getValue(), tokenInfo);
+         } else if (params.get(IdP_Constants.response_type_param).equals("id_token")) {
+             response = new AuthenticationSuccessResponse(new URI(params.get(IdP_Constants.redirect_uri_param)), null, signedJWT, null, new State(params.get(IdP_Constants.state_param)), null, ResponseMode.FRAGMENT);
+-- 
+2.17.1
+

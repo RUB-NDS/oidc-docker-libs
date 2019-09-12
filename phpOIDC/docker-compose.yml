@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  phpoidc:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+#      - "80:80"
+      - "80"
+    networks:
+      professos_default:
+        aliases:
+          - honest-sp.com
+          - www.honest-sp.com
+          - honest-idp.com
+          - www.honest-idp.com
+    links: 
+      - db
+
+  db:
+    build:
+      context: ./conf
+      dockerfile: db_Dockerfile
+    networks:
+      professos_default:
+
+
+networks:
+  professos_default:
+    external:
+      name: professos-default-net
+

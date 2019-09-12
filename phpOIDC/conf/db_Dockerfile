@@ -1,0 +1,7 @@
+# use mysql 5.7 for support of old authentication mode
+FROM mysql:5.7 as builder
+
+# needed for intialization
+ENV MYSQL_ROOT_PASSWORD=root
+
+COPY ./create_db.sql /docker-entrypoint-initdb.d/

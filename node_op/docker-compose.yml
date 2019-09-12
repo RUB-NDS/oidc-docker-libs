@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  node-oidc-provider:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "4433:4433"
+    environment:
+      - ISSUER=https://honest-idp.com:4433
+      - NODE_ENV=production
+      - DEBUG=node-oidc-provider:*
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    networks:
+      professos_default:
+        aliases:
+          - www.honest-idp.com
+          - honest-idp.com
+
+networks:
+  professos_default:
+    external:
+      name: professos-default-net
+

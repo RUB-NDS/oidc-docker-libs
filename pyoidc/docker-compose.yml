@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  pyoidc:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+      - "8880:8880"
+    networks:
+      professos_default:
+        aliases:
+          - honest-sp.com
+          - honest-idp.com
+
+networks:
+  professos_default:
+    external:
+      name: professos-default-net
+

@@ -1,0 +1,48 @@
+
+
+http://honest-idp.com/oidc_idp/
+
+
+{
+  "client_secret_expires_at": 0,
+  "scope": "openid email profile",
+  "redirect_uris": [
+      "http://rp.oidc.honest-sso.de:8080/dispatch/"
+  ],
+  "client_secret": "secret-client1",
+  "tls_client_certificate_bound_access_tokens": false,
+  "client_name": "PrOfESSOS Evil RP",
+  "token_endpoint_auth_method": "client_secret_basic",
+  "client_id": "client1"
+} 
+
+
+
+{
+  "client_secret_expires_at": 0,
+  "scope": "openid email profile",
+  "redirect_uris": [
+      "http://rp.oidc.attack-sso.de:8080/dispatch/"
+  ],
+  "client_secret": "secret-client2",
+  "tls_client_certificate_bound_access_tokens": false,
+  "client_name": "PrOfESSOS Evil RP",
+  "token_endpoint_auth_method": "client_secret_basic",
+  "client_id": "client2"
+}
+
+
+
+let username = document.getElementsByName('j_username')[0];
+username.value = "§current_user_username§";
+let password = document.getElementsByName("j_password")[0];
+password.value = "§current_user_password§";
+document.forms[0].submit();
+
+
+document.forms[0].submit()
+
+
+victim
+123456
+attacker
