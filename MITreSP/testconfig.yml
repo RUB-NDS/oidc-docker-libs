@@ -1,8 +1,0 @@
-DockerComposeFile: docker-compose.yml
-Tests:
-  - TestTargetName: MITreID Connect Simple Web App
-    TestConfigFile: professos.json
-  - TestTargetName: Testing a Single TestStep
-    TestConfigFile: professos.json
-    TestStepsToRun:
-      - "ID Spoofing 2"

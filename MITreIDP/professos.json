@@ -1,8 +1,0 @@
-{
-  "UrlOPTarget":"http://honestidp.de:8080/openid-connect-server-webapp",
-  "User1Name":"user1",
-  "User2Name":"user2",
-  "User1Pass":"user1pass",
-  "User2Pass":"user2pass",
-  "Type":"de.rub.nds.oidc.test_model.TestOPConfigType"
-}

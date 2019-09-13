@@ -1,7 +1,0 @@
-{
-    "UrlClientTarget": "http://www.honestsp.de:8080/simple-web-app/login",
-    "FinalValidUrl": "http://www.honestsp.de:8080/simple-web-app/",
-    "HonestUserNeedle": "{sub=honest-op-test-subject, iss=§step.browser_input_honest-op_url§}",
-    "EvilUserNeedle": "{sub=evil-op-test-subject, iss=§step.browser_input_evil-op_url§}",
-    "ProfileUrl": "http://www.honestsp.de:8080/simple-web-app/user"
-} 

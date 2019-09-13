@@ -1,5 +1,0 @@
-Tests:
-  - TestTargetName: MITre IdP OIDC Server Web App
-    TestConfigFile: professos.json
-
-DockerComposeFile: docker-compose.yml
