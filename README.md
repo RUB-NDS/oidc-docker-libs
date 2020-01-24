@@ -1,8 +1,9 @@
 # oidc-lab
 
 ## Build & Run
+
 ```
-docker-compose build
+docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN}
 docker-compose up professos mitreid-connect
 ```
 
@@ -10,3 +11,4 @@ docker-compose up professos mitreid-connect
 
 - Configure Browser to use Proxy -> localhost:8080
 - Sites could be browsed e.g. http://professos without further host configurations
+

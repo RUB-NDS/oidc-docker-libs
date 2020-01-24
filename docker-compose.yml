@@ -1,14 +1,32 @@
-version: "3"
+version: "3.6"
 
 services:
   professos:
-    image: python:3.7
-    command: python -m http.server 80
+    build:
+      context: ./professos
+      args:
+        gitbranch: development
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+        CONTROLLER_HOST: openid.professos
+        HONEST_OP_HOST: honest-idp.professos
+        EVIL_OP_HOST: attack-idp.professos
+        HONEST_RP_HOST: rp.professos
+        EVIL_RP_HOST: evilrp.professos
+        TEST_RP_HOST: mitreid-simple
+        TEST_OP_HOST: mitreid-server
     environment:
       http_proxy: ${HTTP_PROXY}
       https_proxy: ${HTTPS_PROXY}
     networks:
-      - profnet
+      profnet:
+        aliases:
+          - openid.professos
+          - honestop.professos
+          - honestrp.professos
+          - evilop.professos
+          - evilrp.professos
+          - testop.professos
+          - testrp.professos
 
   nginx-proxy-mitm:
     command: mitmweb --web-iface 0.0.0.0 --set web_open_browser=false --ssl-insecure
