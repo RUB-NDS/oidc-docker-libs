@@ -1,0 +1,85 @@
+version: "3"
+
+services:
+  professos:
+    image: python:3.7
+    command: python -m http.server 80
+    environment:
+      http_proxy: ${HTTP_PROXY}
+      https_proxy: ${HTTPS_PROXY}
+    networks:
+      - profnet
+
+  nginx-proxy-mitm:
+    command: mitmweb --web-iface 0.0.0.0 --set web_open_browser=false --ssl-insecure
+    dns:
+      - 127.0.0.1
+    image: artemkloko/mitm-nginx-proxy-companion
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - idpnet
+      - rpnet
+      - profnet
+
+  nginx-proxy:
+    depends_on:
+      - certs
+    image: jwilder/nginx-proxy
+    labels:
+      - "mitmproxy.proxyVirtualHosts=true"
+    volumes:
+      - certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+      DEFAULT_HOST: professos
+      http_proxy: ${HTTP_PROXY}
+      https_proxy: ${HTTPS_PROXY}
+    networks:
+      - profnet
+
+
+  certs:
+    environment:
+      - CA_CERT=/certs/self-signed.crt
+      - CA_KEY=/certs/self-signed.key
+      - CA_EXPIRE=3650
+      - SSL_SIZE=2048
+    image: paulczar/omgwtfssl
+    volumes:
+      - certs:/certs
+
+  app_a:
+    #build: ./app
+    image: python:3.7
+    command: python -m http.server 80
+    environment:
+      VIRTUAL_HOST: app_a.local
+      http_proxy: ${HTTP_PROXY}
+      https_proxy: ${HTTPS_PROXY}
+    networks:
+      - idpnet
+
+  app_b:
+    #build: ./app
+    image: python:3.7
+    command: python -m http.server 80
+    environment:
+      http_proxy: ${HTTP_PROXY}
+      https_proxy: ${HTTPS_PROXY}
+    networks:
+      - rpnet
+
+networks:
+  profnet:
+    driver: bridge
+  idpnet:
+    internal: true
+  rpnet:
+    internal: true
+
+volumes:
+  certs:
