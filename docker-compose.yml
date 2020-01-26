@@ -12,7 +12,7 @@ services:
         EVIL_OP_HOST: attack-idp.professos
         HONEST_RP_HOST: rp.professos
         EVIL_RP_HOST: evilrp.professos
-        TEST_RP_HOST: mitreid-simple
+        TEST_RP_HOST: mitreid-client
         TEST_OP_HOST: mitreid-server
     environment:
       http_proxy: ${HTTP_PROXY}
@@ -21,12 +21,10 @@ services:
       profnet:
         aliases:
           - openid.professos
-          - honestop.professos
-          - honestrp.professos
-          - evilop.professos
+          - honest-idp.professos
+          - rp.professos
+          - attack-idp.professos
           - evilrp.professos
-          - testop.professos
-          - testrp.professos
 
   nginx-proxy-mitm:
     command: mitmweb --web-iface 0.0.0.0 --set web_open_browser=false --ssl-insecure
@@ -81,11 +79,14 @@ services:
     networks:
       - idpnet
 
-  app_b:
-    #build: ./app
-    image: python:3.7
-    command: python -m http.server 80
+  mitreid-client:
+    build:
+      context: ./rp/mitreid-client
+      args:
+        CONTROLLER_URL: openid.professos
     environment:
+      VIRTUAL_HOST: mitreid-client
+      #VIRTUAL_PORT: 8080
       http_proxy: ${HTTP_PROXY}
       https_proxy: ${HTTPS_PROXY}
     networks:
