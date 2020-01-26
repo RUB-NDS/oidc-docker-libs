@@ -68,12 +68,14 @@ services:
     volumes:
       - certs:/certs
 
-  app_a:
-    #build: ./app
-    image: python:3.7
-    command: python -m http.server 80
+  mitreid-server:
+    build:
+      context: ./idp/mitreid-server
+      args:
+        CONTROLLER_URL: openid.professos
     environment:
-      VIRTUAL_HOST: app_a.local
+      VIRTUAL_HOST: mitreid-server
+      #VIRTUAL_PORT: 8080
       http_proxy: ${HTTP_PROXY}
       https_proxy: ${HTTPS_PROXY}
     networks:
