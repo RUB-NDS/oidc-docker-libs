@@ -13,76 +13,82 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y git wget sudo && 
 	mkdir -p $HOME
 
 # Install
-#USER mitreidc
 WORKDIR $HOME
 
 # fetch the source code using provided branch
 RUN git clone --branch $BRANCH https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server.git . 
 
-#### this can be done in the next build stage by directly manipulating the .war archive - thus, a changed config
-#### does not require us to recompile everything
-## replace server config, user db, and clients db
-#COPY ./config/server-config.xml $HOME/openid-connect-server-webapp/src/main/webapp/WEB-INF/server-config.xml
-#RUN sed -i "s|{ISSUER}|$ISSUER|g" $HOME/openid-connect-server-webapp/src/main/webapp/WEB-INF/server-config.xml
-#
-#COPY ./config/users.sql $HOME/openid-connect-server-webapp/src/main/resources/db/hsql/users.sql
-#COPY ./config/clients.sql $HOME/openid-connect-server-webapp/src/main/resources/db/hsql/clients.sql
-
 # compile
 RUN mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true clean package
 
-FROM jboss/wildfly:14.0.1.Final
-
-USER root
-RUN yum -y install perl
-USER jboss
-
-## make sure bouncycastle is setup
-#RUN cd $JAVA_HOME/jre/lib/ext/ && \
-#	wget http://www.bouncycastle.org/download/bcprov-jdk15on-160.jar -nv && \
-#	cd $JAVA_HOME/jre/lib/security && \
-#	echo 'security.provider.10=org.bouncycastle.jce.provider.BouncyCastleProvider' >> $JAVA_HOME/jre/lib/security/java.security
+#####################################
 #
+FROM openjdk:8-jre
+
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    git \
+    zip \
+    curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install wildfly
+ENV WILDFLY_VERSION="16.0.0.Final"
+ENV JBOSS_HOME="/opt/jboss/wildfly"
+
+RUN groupadd -r jboss  && useradd -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss
+
+RUN curl -O https://download.jboss.org/wildfly/$WILDFLY_VERSION/wildfly-$WILDFLY_VERSION.tar.gz \
+    && tar xf wildfly-$WILDFLY_VERSION.tar.gz \
+    && mkdir -p $JBOSS_HOME \
+    && mv wildfly-$WILDFLY_VERSION/* $JBOSS_HOME \
+    && chown -R jboss:0 ${JBOSS_HOME} \
+    && chmod -R g+rw ${JBOSS_HOME} \
+    && rm -r wildfly-$WILDFLY_VERSION.tar.gz  wildfly-$WILDFLY_VERSION
 
 ENV HOME /opt/mitreidc
 ENV TARGET_WAR /opt/jboss/wildfly/standalone/deployments/oidc-server.war
 
+USER root
 # deploy compiled war to wildfly container
 COPY --from=builder $HOME/openid-connect-server-webapp/target/openid-connect-server-webapp.war $TARGET_WAR
 
-
 # update config in .war, so we dont need to recompile when changing configs
-USER root
-ARG TEST_OP_HOST
+
+ARG MITREID_SERVER_HOST
+WORKDIR $HOME
 COPY ./config/WEB-INF ./WEB-INF
 RUN perl -p -e 's/\$\{(\w+)\}/(exists $ENV{$1}?$ENV{$1}:"missing variable $1")/eg' < WEB-INF/server-config-template.xml > WEB-INF/server-config.xml
-USER jboss
 
-RUN jar uf $TARGET_WAR WEB-INF/server-config.xml
-RUN jar uf $TARGET_WAR WEB-INF/classes/db/hsql/users.sql
-RUN jar uf $TARGET_WAR WEB-INF/classes/db/hsql/clients.sql
-
+RUN zip -ur $TARGET_WAR WEB-INF/server-config.xml \
+                        WEB-INF/classes/db/hsql/users.sql \
+                        WEB-INF/classes/db/hsql/clients.sql
 
 ## add a safeguard file that contains Professos' controller domain
 ARG CONTROLLER_URL
 RUN mkdir -p /opt/jboss/wildfly/static/
-RUN echo "$CONTROLLER_URL" > /opt/jboss/wildfly/static/static-professos.txt
+RUN echo "https://$CONTROLLER_URL" > /opt/jboss/wildfly/static/static-professos.txt
 ## use a config that serves the static safeguard file
 COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 USER root
 RUN chown jboss:jboss -R /opt/jboss/wildfly/static/static-professos.txt && \
     chown jboss:jboss -R /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
-# copy ca certificates
-#COPY ./config/*.crt /etc/pki/ca-trust/source/anchors/
-#RUN chmod 0644 /etc/pki/ca-trust/source/anchors/*
-#RUN update-ca-trust
+###
+# deploy certs
+ARG CA_DIR="/certs"
+ARG CA_CERT="oicd-ca.crt"
+ARG MITREID_SERVER_HOST
+VOLUME ["$CA_DIR"]
 
-USER jboss
-
-WORKDIR $HOME/openid-connect-server-webapp
-# Preload Jetty dependencies
-#RUN mvn -Djetty.skip=true jetty:run
+###
+# apache
+COPY config/mitreid.conf /etc/apache2/sites-available/
+RUN sed -i "s#MITREID_SERVER_HOST#$MITREID_SERVER_HOST#g" /etc/apache2/sites-available/mitreid.conf
+RUN a2enmod rewrite proxy_http headers ssl
+RUN a2dissite 000-default
+RUN a2ensite mitreid
 
 EXPOSE 8080
 
@@ -92,8 +98,11 @@ EXPOSE 8080
 
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interfaces
-#CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug"]
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
+    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # build with: "sudo docker build -t mitreid-server-webapp:latest ."
 # run with: "sudo docker run -ti -p 8080:8080 mitreid-server-webapp:latest"

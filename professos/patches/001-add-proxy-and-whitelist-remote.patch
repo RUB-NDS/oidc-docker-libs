@@ -1,0 +1,41 @@
+diff --git a/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java b/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
+index 8128acb..925e169 100644
+--- a/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
++++ b/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
+@@ -29,6 +29,7 @@ import org.openqa.selenium.OutputType;
+ import org.openqa.selenium.WebDriver;
+ import org.openqa.selenium.chrome.ChromeDriver;
+ import org.openqa.selenium.chrome.ChromeOptions;
++import org.openqa.selenium.remote.DesiredCapabilities;
+ import org.openqa.selenium.remote.RemoteWebDriver;
+ import org.openqa.selenium.remote.RemoteWebElement;
+ import org.openqa.selenium.support.ui.Sleeper;
+@@ -96,8 +97,12 @@ public abstract class BrowserSimulator {
+ 	}
+ 
+ 	protected RemoteWebDriver getDriverInstance() {
++		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+ 		ChromeOptions chromeOptions = new ChromeOptions();
+ 
++		capabilities.setCapability("network.proxy.http", "HTTP_PROXY_URL");
++		capabilities.setCapability("network.proxy.http_port", "HTTP_PROXY_PORT");
++
+ 		// load chromedriver config
+ 		System.setProperty("webdriver.chrome.driver", seleniumCfg.getString("chromedriver_path"));
+ 		if (seleniumCfg.hasPath("chromedriver_logfile")) {
+@@ -108,12 +113,13 @@ public abstract class BrowserSimulator {
+ 			// do not search for chrome in OS $PATH
+ 			chromeOptions.setBinary(seleniumCfg.getString("chrome_browser_path"));
+ 		}
+-
+-		chromeOptions.addArguments("incognito", "headless", "no-sandbox", "disable-gpu", "window-size=1024x768");
++		chromeOptions.addArguments("incognito", "headless", "no-sandbox", "disable-gpu", "window-size=1024x768", "whitelisted-ips=''");
+ 		// disable certificate validation to prevent chrome from getting stuck on cert errors
+ 		// requires chrome >= 65 to work (ignored otherwise)
+ 		chromeOptions.setAcceptInsecureCerts(true);
+ 
++		chromeOptions.merge(capabilities);
++
+ 		RemoteWebDriver d = new ChromeDriver(chromeOptions);
+ 
+ 		d.manage().timeouts().implicitlyWait(NORMAL_WAIT_TIMEOUT, TimeUnit.SECONDS);

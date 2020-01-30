@@ -61,20 +61,31 @@ RUN zip -ur /opt/jboss/wildfly/standalone/deployments/simple-web-app.war WEB-INF
 ## add a safeguard file that contains controller domain
 ARG CONTROLLER_URL
 RUN mkdir -p /opt/jboss/wildfly/static/
-RUN echo "http://$CONTROLLER_URL" > /opt/jboss/wildfly/static/static-professos.txt
+RUN echo "https://$CONTROLLER_URL" > /opt/jboss/wildfly/static/static-professos.txt
 RUN chown jboss:jboss -R /opt/jboss/wildfly/static/static-professos.txt
 # add wildfly config that serves the static safeguard file
 COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 
+###
+# deploy certs
+ARG CA_DIR="/certs"
+ARG CA_CERT="oicd-ca.crt"
+ARG MITREID_CLIENT_HOST
+VOLUME ["$CA_DIR"]
+
+###
+# apache
 COPY config/mitreid.conf /etc/apache2/sites-available/
-RUN a2enmod rewrite proxy_http headers
+RUN sed -i "s#MITREID_CLIENT_HOST#$MITREID_CLIENT_HOST#g" /etc/apache2/sites-available/mitreid.conf
+RUN a2enmod rewrite proxy_http headers ssl
 RUN a2dissite 000-default
 RUN a2ensite mitreid
-
 
 # Expose the ports we're interested in
 EXPOSE 8080
 
-COPY entry.sh /entry.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
+    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
 
-ENTRYPOINT ["/entry.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]

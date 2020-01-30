@@ -1,30 +1,17 @@
 version: "3.6"
 
 services:
-  professos:
+  certs:
     build:
-      context: ./professos
-      args:
-        gitbranch: development
-        GITHUB_TOKEN: ${GITHUB_TOKEN}
-        CONTROLLER_HOST: openid.professos
-        HONEST_OP_HOST: honest-idp.professos
-        EVIL_OP_HOST: attack-idp.professos
-        HONEST_RP_HOST: rp.professos
-        EVIL_RP_HOST: evilrp.professos
-        TEST_RP_HOST: mitreid-client
-        TEST_OP_HOST: mitreid-server
+      context: ./oicd-cert
     environment:
-      http_proxy: ${HTTP_PROXY}
-      https_proxy: ${HTTPS_PROXY}
-    networks:
-      profnet:
-        aliases:
-          - openid.professos
-          - honest-idp.professos
-          - rp.professos
-          - attack-idp.professos
-          - evilrp.professos
+      - CA_KEY=oicd-ca.key
+      - CA_EXPIRE=3650
+      - SSL_KEY_SIZE=2048
+    env_file:
+      - ".env"
+    volumes:
+      - certs:/certs
 
   nginx-proxy-mitm:
     command: mitmweb --web-iface 0.0.0.0 --set web_open_browser=false --ssl-insecure
@@ -41,43 +28,64 @@ services:
       - rpnet
       - profnet
 
-  nginx-proxy:
+#  nginx-proxy:
+#    depends_on:
+#      - certs
+#    image: jwilder/nginx-proxy
+#    labels:
+#      - "mitmproxy.proxyVirtualHosts=true"
+#    volumes:
+#      - certs:/etc/nginx/certs:ro
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#    environment:
+#      DEFAULT_HOST: professos
+#      http_proxy: ${HTTP_PROXY}
+#      https_proxy: ${HTTPS_PROXY}
+#    networks:
+#      - profnet
+
+  professos:
+    build:
+      context: ./professos
+      args:
+        gitbranch: development
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+        CA_CERT: ${CA_CERT}
+        CONTROLLER_HOST: ${CONTROLLER_HOST}
+        HONEST_OP_HOST: ${HONEST_OP_HOST}
+        EVIL_OP_HOST: ${EVIL_OP_HOST}
+        HONEST_RP_HOST: ${HONEST_RP_HOST}
+        EVIL_RP_HOST: ${EVIL_RP_HOST}
+        TEST_RP_HOST: ${MITREID_CLIENT_HOST}
+        TEST_OP_HOST: ${MITREID_SERVER_HOST}
+    environment:
+      VIRTUAL_HOST: professos
     depends_on:
       - certs
-    image: jwilder/nginx-proxy
-    labels:
-      - "mitmproxy.proxyVirtualHosts=true"
     volumes:
-      - certs:/etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    environment:
-      DEFAULT_HOST: professos
-      http_proxy: ${HTTP_PROXY}
-      https_proxy: ${HTTPS_PROXY}
+      - certs:/certs:ro
     networks:
-      - profnet
-
-
-  certs:
-    environment:
-      - CA_CERT=/certs/self-signed.crt
-      - CA_KEY=/certs/self-signed.key
-      - CA_EXPIRE=3650
-      - SSL_SIZE=2048
-    image: paulczar/omgwtfssl
-    volumes:
-      - certs:/certs
+      profnet:
+        aliases:
+          - ${CONTROLLER_HOST}
+          - ${HONEST_OP_HOST}
+          - ${EVIL_OP_HOST}
+          - ${HONEST_RP_HOST}
+          - ${EVIL_RP_HOST}
 
   mitreid-server:
     build:
       context: ./idp/mitreid-server
       args:
-        CONTROLLER_URL: openid.professos
+        ISSUER: ${MITREID_SERVER_HOST}
+        MITREID_SERVER_HOST: ${MITREID_SERVER_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
     environment:
-      VIRTUAL_HOST: mitreid-server
-      #VIRTUAL_PORT: 8080
-      http_proxy: ${HTTP_PROXY}
-      https_proxy: ${HTTPS_PROXY}
+      VIRTUAL_HOST: ${MITREID_SERVER_HOST}
     networks:
       - idpnet
 
@@ -85,12 +93,14 @@ services:
     build:
       context: ./rp/mitreid-client
       args:
-        CONTROLLER_URL: openid.professos
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+        MITREID_CLIENT_HOST: ${MITREID_CLIENT_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
     environment:
-      VIRTUAL_HOST: mitreid-client
-      #VIRTUAL_PORT: 8080
-      http_proxy: ${HTTP_PROXY}
-      https_proxy: ${HTTPS_PROXY}
+      VIRTUAL_HOST: ${MITREID_CLIENT_HOST}
     networks:
       - rpnet
 

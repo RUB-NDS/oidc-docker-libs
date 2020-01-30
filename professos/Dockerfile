@@ -7,7 +7,11 @@ ARG gitbranch
 ARG GITHUB_TOKEN
 
 RUN git clone -b $gitbranch https://${GITHUB_TOKEN}:x-oauth-basic@github.com/RUB-NDS/PrOfESSOS-Development.git /professos
-#RUN git clone -b development https://gitlab.olymp.lan/masterthesis/PrOfESSOS-Development.git /professos/
+#COPY patches/001-add-proxy-and-whitelist-remote.patch /professos/001-add-proxy-and-whitelist-remote.patch
+# TODO use env file values for URL and PORT
+#RUN cd /professos && sed -i "s/HTTP_PROXY_URL/nginx-proxy-mitm/g" 001-add-proxy-and-whitelist-remote.patch && \
+#    sed -i "s/HTTP_PROXY_PORT/8080/g" 001-add-proxy-and-whitelist-remote.patch && \
+#    git apply 001-add-proxy-and-whitelist-remote.patch
 RUN mkdir -p /home/app
 RUN cp -R /professos/* /home/app/
 RUN mvn -f /home/app/pom.xml clean package
@@ -29,8 +33,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     vim \
     unzip \
+    libglib2.0-0 \
+    libnss3 \
     git \
     libfontconfig \
+    iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 #chromium-browser
@@ -89,35 +96,36 @@ RUN perl -p -e 's/\$\{(\w+)\}/(exists $ENV{$1}?$ENV{$1}:"missing variable $1")/e
 COPY --from=build /home/app/target/professos-1.0.0-SNAPSHOT.war ${JBOSS_HOME}/standalone/deployments/professos.war
 
 ###
+# deploy certs
+ARG CA_DIR="/certs"
+ARG CA_CERT
+VOLUME ["$CA_DIR"]
+
+###
 # apache
 COPY config/templates/* /etc/apache2/sites-available/
 RUN sed -i "s#CONTROLLER_HOST#$CONTROLLER_HOST#g" /etc/apache2/sites-available/controller.conf && \
     sed -i "s#HONEST_OP_HOST#$HONEST_OP_HOST#g" /etc/apache2/sites-available/honest_op.conf && \
     sed -i "s#HONEST_RP_HOST#$HONEST_RP_HOST#g" /etc/apache2/sites-available/honest_rp.conf && \
     sed -i "s#EVIL_OP_HOST#$EVIL_OP_HOST#g" /etc/apache2/sites-available/evil_op.conf && \
-    sed -i "s#EVIL_RP_HOST#$EVIL_RP_HOST#g" /etc/apache2/sites-available/evil_rp.conf && \
-    sed -i "s#TEST_RP_HOST#$TEST_RP_HOST#g" /etc/apache2/sites-available/test_rp.conf && \
-    sed -i "s#TEST_OP_HOST#$TEST_OP_HOST#g" /etc/apache2/sites-available/test_op.conf
+    sed -i "s#EVIL_RP_HOST#$EVIL_RP_HOST#g" /etc/apache2/sites-available/evil_rp.conf
 
-#COPY config/professos.conf /etc/apache2/sites-available/
-RUN a2enmod rewrite proxy_http headers
+RUN a2enmod rewrite proxy_http headers ssl
 RUN a2dissite 000-default
-RUN a2ensite controller honest_op evil_op honest_rp evil_rp test_op test_rp
+RUN a2ensite controller honest_op evil_op honest_rp evil_rp
 
 ###
 # Run
 
 # Expose the ports we're interested in
 EXPOSE 8080
-
 # port 8787 for debugging WildFly
-#EXPOSE 8787
-# uncomment below, if you need to acces the management interface
-#EXPOSE 9990
+EXPOSE 8787
+# if you need to acces the management interface
+EXPOSE 9990
 
-# Set the default command to run on boot
-# This will boot WildFly in the standalone mode and bind to all interface
-#ENTRYPOINT ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug", "0.0.0.0:8787"]
-COPY entry.sh /entry.sh
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
+    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
 
-ENTRYPOINT ["/entry.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
