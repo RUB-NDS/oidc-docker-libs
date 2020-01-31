@@ -30,7 +30,7 @@ prompt = no
 C = DE
 L = Bochum
 O = RUB
-OU = OICD TestLab
+OU = OIDC TestLab
 CN = professos
 
 [ v3_req ]
@@ -75,14 +75,14 @@ if [ -e ${CA_ROOT_CERT} ]; then
     echo "HINT: If you really want to create a new, delete files from CA directory!"
 else
     echo "Generate new ROOT CA ${CA_ROOT_KEY}"
-    # Create ROOT CA fo OICD testlab
+    # Create ROOT CA fo OIDC testlab
     openssl req -x509 -new -nodes -extensions v3_ca \
         -newkey rsa:${SSL_KEY_SIZE} \
         -keyout ${CA_ROOT_KEY} \
         -days ${CA_EXPIRE} \
         -out ${CA_ROOT_CERT} \
         -sha512 \
-        -subj '/CN=professos/O=PrOfESSOS OICD Test Lab./C=DE'
+        -subj '/CN=professos/O=PrOfESSOS OIDC Test Lab./C=DE'
 fi
 
 for DOMAIN_NAME in $(env | grep _HOST= | cut -d "=" -f 2)

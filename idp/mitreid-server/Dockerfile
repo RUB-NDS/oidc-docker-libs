@@ -78,7 +78,7 @@ RUN chown jboss:jboss -R /opt/jboss/wildfly/static/static-professos.txt && \
 ###
 # deploy certs
 ARG CA_DIR="/certs"
-ARG CA_CERT="oicd-ca.crt"
+ARG CA_CERT="oidc-ca.crt"
 ARG MITREID_SERVER_HOST
 VOLUME ["$CA_DIR"]
 

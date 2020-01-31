@@ -1,8 +1,8 @@
 FROM alpine
 
 ENV CA_DIR "/certs"
-ENV CA_CERT oicd-ca.crt
-ENV CA_KEY oicd-ca.key
+ENV CA_CERT oidc-ca.crt
+ENV CA_KEY oidc-ca.key
 ENV CA_EXPIRE 3650
 ENV SSL_KEY_SIZE 2048
 

@@ -3,9 +3,9 @@ version: "3.6"
 services:
   certs:
     build:
-      context: ./oicd-cert
+      context: ./oidc-cert
     environment:
-      - CA_KEY=oicd-ca.key
+      - CA_KEY=oidc-ca.key
       - CA_EXPIRE=3650
       - SSL_KEY_SIZE=2048
     env_file:
@@ -35,23 +35,23 @@ services:
       - rpnet
       - profnet
 
-  nginx-proxy:
-    depends_on:
-      - certs
-    image: jwilder/nginx-proxy
-    labels:
-      - "mitmproxy.proxyVirtualHosts=true"
-    volumes:
-      - certs:/etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    env_file:
-      - .proxy_env
-    environment:
-      DEFAULT_HOST: openid.professos
-    networks:
-      - idpnet
-      - rpnet
-      - profnet
+#  nginx-proxy:
+#    depends_on:
+#      - certs
+#    image: jwilder/nginx-proxy
+#    labels:
+#      - "mitmproxy.proxyVirtualHosts=true"
+#    volumes:
+#      - certs:/etc/nginx/certs:ro
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#    env_file:
+#      - .proxy_env
+#    environment:
+#      DEFAULT_HOST: openid.professos
+#    networks:
+#      - idpnet
+#      - rpnet
+#      - profnet
 
   professos:
     build:
@@ -69,6 +69,7 @@ services:
         TEST_OP_HOST: ${MITREID_SERVER_HOST}
     environment:
       VIRTUAL_HOST: "*.professos"
+      VIRTUAL_PORT: 443
     depends_on:
       - certs
     volumes:
@@ -93,8 +94,11 @@ services:
       - certs
     volumes:
       - certs:/certs:ro
+#    env_file:
+#      - .proxy_env
     environment:
       VIRTUAL_HOST: ${MITREID_SERVER_HOST}
+      VIRTUAL_PORT: 443
     networks:
       - idpnet
 
@@ -108,8 +112,11 @@ services:
       - certs
     volumes:
       - certs:/certs:ro
+#    env_file:
+#      - .proxy_env
     environment:
       VIRTUAL_HOST: ${MITREID_CLIENT_HOST}
+      VIRTUAL_PORT: 443
     networks:
       - rpnet
 

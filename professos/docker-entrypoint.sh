@@ -5,7 +5,7 @@ if [ ! -e /usr/local/share/ca-certificates/CA_CERT ]; then
   update-ca-certificates
 
   keytool -keystore /usr/local/openjdk-11/lib/security/cacerts -storepass changeit -noprompt -trustcacerts \
-          -importcert -alias oicd -file /usr/share/ca-certificates/CA_CERT
+          -importcert -alias oidc -file /usr/share/ca-certificates/CA_CERT
 fi
 
 service apache2 start
