@@ -35,24 +35,6 @@ services:
       - rpnet
       - profnet
 
-#  nginx-proxy:
-#    depends_on:
-#      - certs
-#    image: jwilder/nginx-proxy
-#    labels:
-#      - "mitmproxy.proxyVirtualHosts=true"
-#    volumes:
-#      - certs:/etc/nginx/certs:ro
-#      - /var/run/docker.sock:/tmp/docker.sock:ro
-#    env_file:
-#      - .proxy_env
-#    environment:
-#      DEFAULT_HOST: openid.professos
-#    networks:
-#      - idpnet
-#      - rpnet
-#      - profnet
-
   professos:
     build:
       context: ./professos
@@ -67,9 +49,8 @@ services:
         EVIL_RP_HOST: ${EVIL_RP_HOST}
         TEST_RP_HOST: ${MITREID_CLIENT_HOST}
         TEST_OP_HOST: ${MITREID_SERVER_HOST}
-    environment:
-      VIRTUAL_HOST: "*.professos"
-      VIRTUAL_PORT: 443
+    env_file:
+      - .proxy_env
     depends_on:
       - certs
     volumes:
@@ -94,8 +75,8 @@ services:
       - certs
     volumes:
       - certs:/certs:ro
-#    env_file:
-#      - .proxy_env
+    env_file:
+      - .proxy_env
     environment:
       VIRTUAL_HOST: ${MITREID_SERVER_HOST}
       VIRTUAL_PORT: 443
@@ -112,8 +93,8 @@ services:
       - certs
     volumes:
       - certs:/certs:ro
-#    env_file:
-#      - .proxy_env
+    env_file:
+      - .proxy_env
     environment:
       VIRTUAL_HOST: ${MITREID_CLIENT_HOST}
       VIRTUAL_PORT: 443
