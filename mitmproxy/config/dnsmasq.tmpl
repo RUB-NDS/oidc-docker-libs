@@ -1,0 +1,35 @@
+{{/* The following was copied from https://github.com/jderusse/docker-dns-gen/blob/master/config/dnsmasq.tmpl */}}
+
+{{ define "host" }}
+    {{ $host := .Host }}
+    {{ $tld := .Tld }}
+    {{ if eq $tld "" }}
+        {{ range $index, $network := .Container.Networks }}
+            {{ if ne $network.IP "" }}
+address=/{{ $host }}/{{ $network.IP }}
+            {{ end }}
+        {{ end }}
+    {{ else }}
+        {{ range $index, $network := .Container.Networks }}
+            {{ if ne $network.IP "" }}
+address=/{{ $host }}.{{ $tld }}/{{ $network.IP }}
+address=/{{ $host }}.{{ $network.Name }}.{{ $tld }}/{{ $network.IP }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{/* The following was added by me in order to resolve containers with Env.VIRTUAL_HOST through container with Labels.mitmproxy.proxyVirtualHosts */}}
+
+{{ range $index, $proxyContainer := $ }}
+    {{ if eq (index $proxyContainer.Labels "mitmproxy.proxyVirtualHosts") "true" }}
+        {{ range $host, $containers := groupByMulti $ "Env.VIRTUAL_HOST" "," }}
+            {{ $host := trimPrefix "*" $host }}
+            {{ range $index, $container := $containers }}
+                {{ template "host" (dict "Container" $proxyContainer "Host" $host "Tld" "") }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+server=8.8.8.8

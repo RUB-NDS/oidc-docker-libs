@@ -13,16 +13,23 @@ services:
     volumes:
       - certs:/certs
 
-  nginx-proxy-mitm:
-    command: mitmweb --web-iface 0.0.0.0 --set web_open_browser=false --ssl-insecure
+  mitmproxy:
+    build:
+      context: ./mitmproxy
+    depends_on:
+      - certs
+    environment:
+      - CA_DIR=${CA_DIR}
+      - CA_CERT=${CA_CERT}
+      - CA_KEY=${CA_KEY}
     dns:
       - 127.0.0.1
-    image: artemkloko/mitm-nginx-proxy-companion
     ports:
       - "8080:8080"
       - "8081:8081"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - certs:/certs:ro
     networks:
       - idpnet
       - rpnet
@@ -106,11 +113,22 @@ services:
 
 networks:
   profnet:
+    name: profnet
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: oidc-profnet
   idpnet:
+    name: idpnet
+    driver: bridge
     internal: true
+    driver_opts:
+      com.docker.network.bridge.name: oidc-idpnet
   rpnet:
+    name: rpnet
+    driver: bridge
     internal: true
+    driver_opts:
+      com.docker.network.bridge.name: oidc-rpnet
 
 volumes:
   certs:
