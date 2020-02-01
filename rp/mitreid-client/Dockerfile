@@ -48,6 +48,9 @@ RUN curl -O https://download.jboss.org/wildfly/$WILDFLY_VERSION/wildfly-$WILDFLY
 
 ENV HOME /opt/mitreidc-sp
 
+ARG ISSUER
+ARG MITREID_CLIENT_HOST
+
 # copy demo client to deployment folder
 COPY --from=builder $HOME/target/simple-web-app.war /opt/jboss/wildfly/standalone/deployments/simple-web-app.war
 
@@ -85,7 +88,5 @@ RUN a2ensite mitreid
 EXPOSE 8080
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
-    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

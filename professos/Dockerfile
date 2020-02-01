@@ -42,7 +42,7 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     dnsutils \
     strace \
-    chromium \
+    chromium=79.0.\* \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -131,7 +131,4 @@ EXPOSE 8787
 EXPOSE 9990
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
-    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
-
 ENTRYPOINT ["/docker-entrypoint.sh"]

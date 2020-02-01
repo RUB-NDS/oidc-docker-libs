@@ -41,6 +41,7 @@ services:
       args:
         gitbranch: development
         GITHUB_TOKEN: ${GITHUB_TOKEN}
+        DISABLE_TLS_TRUST_CHECK: "true"
         CA_CERT: ${CA_CERT}
         CONTROLLER_HOST: ${CONTROLLER_HOST}
         HONEST_OP_HOST: ${HONEST_OP_HOST}
@@ -49,6 +50,9 @@ services:
         EVIL_RP_HOST: ${EVIL_RP_HOST}
         TEST_RP_HOST: ${MITREID_CLIENT_HOST}
         TEST_OP_HOST: ${MITREID_SERVER_HOST}
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
     env_file:
       - .proxy_env
     depends_on:
@@ -78,6 +82,8 @@ services:
     env_file:
       - .proxy_env
     environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${MITREID_SERVER_HOST}
       VIRTUAL_PORT: 443
     networks:
@@ -87,6 +93,7 @@ services:
     build:
       context: ./rp/mitreid-client
       args:
+        ISSUER: ${HONEST_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
         MITREID_CLIENT_HOST: ${MITREID_CLIENT_HOST}
     depends_on:
@@ -96,6 +103,8 @@ services:
     env_file:
       - .proxy_env
     environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${MITREID_CLIENT_HOST}
       VIRTUAL_PORT: 443
     networks:
