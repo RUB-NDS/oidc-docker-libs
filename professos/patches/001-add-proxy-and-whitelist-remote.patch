@@ -23,7 +23,7 @@ index 0a4ff10..f31caf6 100644
  
  	<build>
 diff --git a/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java b/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
-index 8128acb..925e169 100644
+index 8128acb..c5fd2c1 100644
 --- a/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
 +++ b/src/main/java/de/rub/nds/oidc/browser/BrowserSimulator.java
 @@ -29,6 +29,7 @@ import org.openqa.selenium.OutputType;
@@ -53,7 +53,7 @@ index 8128acb..925e169 100644
  		}
 -
 -		chromeOptions.addArguments("incognito", "headless", "no-sandbox", "disable-gpu", "window-size=1024x768");
-+		chromeOptions.addArguments("incognito", "headless", "no-sandbox", "disable-gpu", "window-size=1024x768", "whitelisted-ips=''");
++		chromeOptions.addArguments("--incognito", "--headless", "--no-sandbox", "--disable-gpu", "--window-size=1024x768", "--whitelisted-ips=''");
  		// disable certificate validation to prevent chrome from getting stuck on cert errors
  		// requires chrome >= 65 to work (ignored otherwise)
  		chromeOptions.setAcceptInsecureCerts(true);

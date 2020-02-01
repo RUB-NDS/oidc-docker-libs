@@ -21,7 +21,7 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 FROM openjdk:11-jre-slim
 
-ARG CHROMEDRIVER_VERSION=2.46
+ARG CHROMEDRIVER_VERSION=79.0.3945.36
 ARG WILDFLY_VERSION=18.0.0.Final
 
 USER root
@@ -31,6 +31,8 @@ USER root
 RUN apt-get update && apt-get install -y \
     apache2 \
     curl \
+    wget \
+    gnupg2 \
     vim \
     unzip \
     libglib2.0-0 \
@@ -39,9 +41,10 @@ RUN apt-get update && apt-get install -y \
     libfontconfig \
     iputils-ping \
     dnsutils \
+    strace \
+    chromium \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-#chromium-browser
 
 ###
 # install chromedriver
@@ -72,10 +75,6 @@ RUN cd $HOME \
 # Ensure signals are forwarded to the JVM process correctly for graceful shutdown
 ENV LAUNCH_JBOSS_IN_BACKGROUND true
 
-# add wildfly config (enables proxy-address-forwarding in default http listener; required when Wildfly runs
-# behind a TLS terminating reverse proxy)
-COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
-
 ###
 # Install and configure professos
 ARG CONTROLLER_HOST
@@ -91,10 +90,16 @@ ARG DISABLE_TLS_TRUST_CHECK="false"
 ARG PRINT_TEST_ID_PATH="true"
 ARG TEST_ID_LENGTH=8
 
+USER jboss
+# add wildfly config (enables proxy-address-forwarding in default http listener; required when Wildfly runs
+# behind a TLS terminating reverse proxy)
+COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
 COPY ./config/professos.conf /opt/jboss/professos-template.conf
 RUN perl -p -e 's/\$\{(\w+)\}/(exists $ENV{$1}?$ENV{$1}:"missing variable $1")/eg' < /opt/jboss/professos-template.conf > /opt/jboss/professos.conf
 
 COPY --from=build /home/app/target/professos-1.0.0-SNAPSHOT.war ${JBOSS_HOME}/standalone/deployments/professos.war
+
+USER root
 
 ###
 # deploy certs
