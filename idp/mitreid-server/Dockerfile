@@ -23,7 +23,7 @@ RUN mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true clean package
 
 #####################################
 #
-FROM openjdk:8-jre
+FROM openjdk:8-jdk
 
 RUN apt-get update && apt-get install -y \
     apache2 \
@@ -61,7 +61,7 @@ WORKDIR $HOME
 COPY ./config/WEB-INF ./WEB-INF
 RUN perl -p -e 's/\$\{(\w+)\}/(exists $ENV{$1}?$ENV{$1}:"missing variable $1")/eg' < WEB-INF/server-config-template.xml > WEB-INF/server-config.xml
 
-RUN zip -ur $TARGET_WAR WEB-INF/server-config.xml \
+RUN jar uf $TARGET_WAR WEB-INF/server-config.xml \
                         WEB-INF/classes/db/hsql/users.sql \
                         WEB-INF/classes/db/hsql/clients.sql
 
@@ -99,8 +99,6 @@ EXPOSE 8080
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interfaces
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN sed -i "s#CA_DIR#$CA_DIR#g" /docker-entrypoint.sh && \
-    sed -i "s#CA_CERT#$CA_CERT#g" /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
