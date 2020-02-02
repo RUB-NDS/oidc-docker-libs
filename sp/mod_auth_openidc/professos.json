@@ -1,9 +1,0 @@
-{
-    "UrlClientTarget": "http://honestsp.de/oidc/example.php",
-    "InputFieldName": "iss",
-    "SeleniumScript": "document.querySelector(\"input[name=iss]\").value=\"§browser-input-op_url§\";document.forms[0].submit();",
-    "FinalValidUrl": "http://honestsp.de/oidc/example.php",
-    "HonestUserNeedle": "honest-op-test-subject@§step.browser_input_honest-op_url§",
-    "EvilUserNeedle": "evil-op-test-subject@§step.browser_input_evil-op_url§",
-    "ProfileUrl": "http://honestsp.de/oidc/example.php"
-}

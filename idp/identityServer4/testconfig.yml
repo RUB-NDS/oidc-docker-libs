@@ -1,5 +1,0 @@
-DockerComposeFile: docker-compose.yml
-Tests:
-  - TestTargetName: IdentityServer4
-    TestConfigFile: professos.json
-    CustomTestId: test-id-identityServer4

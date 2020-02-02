@@ -1,4 +1,0 @@
-DockerComposeFile: docker-compose.yml
-Tests:
-  - TestTargetName: Ruby openid_connect_sample OP
-    TestConfigFile: professos.json

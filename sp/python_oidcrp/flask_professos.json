@@ -1,9 +1,0 @@
-{
-    "UrlClientTarget": "https://honest-sp.com:8090",
-    "InputFieldName": "uid",
-    "SeleniumScript": "var opUrl = document.querySelector(\"input[name='uid']\");\nopUrl.value = \"§browser-input-op_url§\";\nopUrl.form.submit();\n",
-    "FinalValidUrl": "https://honest-sp.com:8090/rp",
-    "HonestUserNeedle": "honest-op-test-subject",
-    "EvilUserNeedle": "evil-op-test-subject",
-    "ProfileUrl": "https://honest-sp.com:8090"
-}

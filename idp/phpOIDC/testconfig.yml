@@ -1,4 +1,0 @@
-DockerComposeFile: docker-compose.yml
-Tests:
-  - TestTargetName: phpOIDC IdP
-    TestConfigFile: professos.json
