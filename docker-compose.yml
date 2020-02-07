@@ -57,6 +57,10 @@ services:
       - .proxy_env
     depends_on:
       - certs
+    ports:
+      - "9990:9990"   # enable management interface
+      - "8888:8080"   # web interface
+      - "8787:8787"   # debugging interface
     volumes:
       - certs:/certs:ro
     networks:

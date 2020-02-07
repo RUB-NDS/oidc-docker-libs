@@ -93,11 +93,15 @@ ARG TEST_ID_LENGTH=8
 USER jboss
 # add wildfly config (enables proxy-address-forwarding in default http listener; required when Wildfly runs
 # behind a TLS terminating reverse proxy)
-COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
-COPY ./config/professos.conf /opt/jboss/professos-template.conf
+COPY --chown=jboss:jboss ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standalone.xml
+COPY --chown=jboss:jboss ./config/professos.conf /opt/jboss/professos-template.conf
 RUN perl -p -e 's/\$\{(\w+)\}/(exists $ENV{$1}?$ENV{$1}:"missing variable $1")/eg' < /opt/jboss/professos-template.conf > /opt/jboss/professos.conf
 
-COPY --from=build /home/app/target/professos-1.0.0-SNAPSHOT.war ${JBOSS_HOME}/standalone/deployments/professos.war
+COPY --chown=jboss:jboss --from=build /home/app/target/professos-1.0.0-SNAPSHOT.war ${JBOSS_HOME}/standalone/deployments/
+
+# if you need to acces the management interface
+RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
+EXPOSE 9990
 
 USER root
 
@@ -127,8 +131,7 @@ RUN a2ensite controller honest_op evil_op honest_rp evil_rp
 EXPOSE 8080
 # port 8787 for debugging WildFly
 EXPOSE 8787
-# if you need to acces the management interface
-EXPOSE 9990
+
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
