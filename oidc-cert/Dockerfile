@@ -10,7 +10,18 @@ ENV SSL_KEY_SIZE 2048
 RUN apk add --update openssl bash && \
     rm -rf /var/cache/apk/*
 
-COPY docker-entrypoint.sh /
+# install docker gen
+ENV DOCKER_GEN_VERSION 0.7.4
+
+RUN wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
+ && tar -C /usr/local/bin -xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
+ && rm /docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz
+
+ENV DOCKER_HOST unix:///tmp/docker.sock
+
+COPY cert-gen /cert-gen
+WORKDIR "/cert-gen"
 
 VOLUME ["$CA_DIR"]
-ENTRYPOINT ["/docker-entrypoint.sh"]
+
+ENTRYPOINT ["/cert-gen/docker-entrypoint.sh"]

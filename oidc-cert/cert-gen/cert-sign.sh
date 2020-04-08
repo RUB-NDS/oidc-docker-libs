@@ -1,9 +1,5 @@
 #!/bin/bash
 
-CA_ROOT_CERT=${CA_DIR}/${CA_CERT}
-CA_ROOT_KEY=${CA_DIR}/${CA_KEY}
-
-
 function create_ssl_certificates {
     DNSNAME=$1
     SSL_DIR=${CA_DIR}/${DNSNAME}
@@ -64,28 +60,3 @@ EOF
         -sha512 \
         -extfile ${SSL_DIR}/${DNSNAME}.cnf -extensions 'v3_req'
 }
-
-if [ -z ${CA_DIR} ]; then
-    echo "Empty certification directory, stop processing!"
-    exit 1
-fi
-
-if [ -e ${CA_ROOT_CERT} ]; then
-    echo "ROOT CA Certificate already created!"
-    echo "HINT: If you really want to create a new, delete files from CA directory!"
-else
-    echo "Generate new ROOT CA ${CA_ROOT_KEY}"
-    # Create ROOT CA fo OIDC testlab
-    openssl req -x509 -new -nodes -extensions v3_ca \
-        -newkey rsa:${SSL_KEY_SIZE} \
-        -keyout ${CA_ROOT_KEY} \
-        -days ${CA_EXPIRE} \
-        -out ${CA_ROOT_CERT} \
-        -sha512 \
-        -subj '/CN=professos/O=PrOfESSOS OIDC Test Lab./C=DE'
-fi
-
-for DOMAIN_NAME in $(env | grep _HOST= | cut -d "=" -f 2)
-do
-  create_ssl_certificates ${DOMAIN_NAME}
-done

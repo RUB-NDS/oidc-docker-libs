@@ -12,6 +12,7 @@ services:
       - ".env"
     volumes:
       - certs:/certs
+      - /var/run/docker.sock:/tmp/docker.sock:ro
 
   mitmproxy:
     build:
