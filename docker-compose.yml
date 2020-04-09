@@ -90,7 +90,6 @@ services:
       CA_DIR: ${CA_DIR}
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${MITREID_SERVER_HOST}
-      VIRTUAL_PORT: 443
     networks:
       - idpnet
 
@@ -111,7 +110,6 @@ services:
       CA_DIR: ${CA_DIR}
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${MITREID_CLIENT_HOST}
-      VIRTUAL_PORT: 443
     networks:
       - rpnet
 

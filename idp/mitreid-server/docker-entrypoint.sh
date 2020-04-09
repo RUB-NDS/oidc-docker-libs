@@ -8,7 +8,7 @@ if [ ! -e /usr/local/share/ca-certificates/${CA_CERT} ]; then
           -importcert -alias oidc -file /usr/share/ca-certificates/${CA_CERT}
 fi
 
-service apache2 start
+service apache2 start &
 
 if [ ! -z "$HTTP_PROXY_URL" ]; then
   PROXY_SETTINGS="-Dhttp.proxyHost=${HTTP_PROXY_URL} -Dhttp.proxyPort=${HTTP_PROXY_PORT} -Dhttps.proxyHost=${HTTP_PROXY_URL} -Dhttps.proxyPort=${HTTP_PROXY_PORT} -Dhttp.nonProxyHosts='localhost'"

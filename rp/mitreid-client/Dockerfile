@@ -73,7 +73,6 @@ COPY ./config/standalone.xml /opt/jboss/wildfly/standalone/configuration/standal
 # deploy certs
 ARG CA_DIR="/certs"
 ARG CA_CERT="oidc-ca.crt"
-ARG MITREID_CLIENT_HOST
 VOLUME ["$CA_DIR"]
 
 ###

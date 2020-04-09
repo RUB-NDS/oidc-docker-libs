@@ -55,7 +55,6 @@ USER root
 COPY --from=builder $HOME/openid-connect-server-webapp/target/openid-connect-server-webapp.war $TARGET_WAR
 
 # update config in .war, so we dont need to recompile when changing configs
-
 ARG MITREID_SERVER_HOST
 WORKDIR $HOME
 COPY ./config/WEB-INF ./WEB-INF
@@ -79,7 +78,6 @@ RUN chown jboss:jboss -R /opt/jboss/wildfly/static/static-professos.txt && \
 # deploy certs
 ARG CA_DIR="/certs"
 ARG CA_CERT="oidc-ca.crt"
-ARG MITREID_SERVER_HOST
 VOLUME ["$CA_DIR"]
 
 ###
