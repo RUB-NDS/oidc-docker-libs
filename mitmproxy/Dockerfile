@@ -26,6 +26,10 @@ ENV CA_DIR ""
 ENV CA_CERT ""
 ENV CA_KEY ""
 
+ENV HOME "/home/mitmproxy/"
+ENV MITMPROXY_PATH "/home/mitmproxy/.mitmproxy"
+
 EXPOSE 53/udp
 
+WORKDIR "$HOME"
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
