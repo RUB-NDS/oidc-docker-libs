@@ -94,6 +94,26 @@ services:
     networks:
       - idpnet
 
+  identity-server4:
+    build:
+      context: ./idp/identity-server4
+      args:
+        ISSUER: ${IDENTITY_SERVER4_HOST}
+        SERVER_HOST: ${IDENTITY_SERVER4_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${IDENTITY_SERVER4_HOST}
+    networks:
+      - idpnet
+
   mitreid-client:
     build:
       context: ./rp/mitreid-client
