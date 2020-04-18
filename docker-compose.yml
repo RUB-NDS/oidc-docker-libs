@@ -98,6 +98,7 @@ services:
     build:
       context: ./idp/identity-server4
       args:
+        BRANCH: "3.1.2"
         ISSUER: ${IDENTITY_SERVER4_HOST}
         SERVER_HOST: ${IDENTITY_SERVER4_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
