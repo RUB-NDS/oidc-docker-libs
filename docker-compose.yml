@@ -74,6 +74,10 @@ services:
           - ${HONEST_RP_HOST}
           - ${EVIL_RP_HOST}
 
+########################################################################################################################
+# IdP
+########################################################################################################################
+
   mitreid-server:
     build:
       context: ./idp/mitreid-server
@@ -115,6 +119,47 @@ services:
     networks:
       - idpnet
 
+  keycloak:
+    build:
+      context: ./idp/keycloak
+      args:
+        SERVER_HOST: ${KEYCLOAK_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: 4dm1n
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${KEYCLOAK_HOST}
+    depends_on:
+      - keycloak-postgres
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    networks:
+      - idpnet
+
+  keycloak-postgres:
+    image: postgres:11
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    networks:
+      - idpnet
+
+########################################################################################################################
+# RP
+########################################################################################################################
+
   mitreid-client:
     build:
       context: ./rp/mitreid-client
@@ -135,6 +180,9 @@ services:
     networks:
       - rpnet
 
+########################################################################################################################
+# Networks & Volumes
+########################################################################################################################
 networks:
   profnet:
     name: profnet
