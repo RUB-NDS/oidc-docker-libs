@@ -1,0 +1,14 @@
+{
+  "UrlOPTarget": "https://keycloak/auth/realms/master",
+  "OPMetadata": "",
+  "AccessToken1": "",
+  "AccessToken2": "",
+  "User1Name": "user1",
+  "User2Name": "user2",
+  "User1Pass": "user1pass",
+  "User2Pass": "user2pass",
+  "LoginScript": "var username = document.getElementById(\"username\");\nusername.value = \"§current_user_username§\";\n\nvar password = document.getElementById(\"password\");\npassword.value = \"§current_user_password§\";\n\nif (typeof document.forms[0].submit === \"function\") {\n  document.forms[0].submit();\n} else {\n    // in the demo OP, the \"name\" attribute of\n    // of the submit button is \"submit\", clobbering\n    // the submit() function\n    document.forms[0].login.click();\n}\n",
+  "ConsentScript": "var authBtn = document.confirmationForm.authorize\nauthBtn.click();\n",
+  "Client1Config": "",
+  "Client2Config": ""
+}
