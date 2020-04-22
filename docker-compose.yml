@@ -149,6 +149,8 @@ services:
 
   keycloak-postgres:
     image: postgres:11
+    volumes:
+    -  ./idp/keycloak/config/keycloak.sql:/docker-entrypoint-initdb.d/keycloak-code.sql
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
