@@ -3,7 +3,8 @@ FROM jboss/keycloak:9.0.3
 USER root
 
 RUN microdnf update && \
-    microdnf install -y httpd mod_ssl && \
+    microdnf install -y httpd \
+       mod_ssl && \
     microdnf clean all
 
 ARG CONTROLLER_URL
