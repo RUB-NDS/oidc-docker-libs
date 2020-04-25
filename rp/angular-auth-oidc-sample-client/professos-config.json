@@ -1,0 +1,9 @@
+{
+  "UrlClientTarget": "https://angular-auth-oidc-client",
+  "InputFieldName": "",
+  "SeleniumScript": "//button[text()='Login']",
+  "FinalValidUrl": "https://angular-auth-oidc-client/",
+  "HonestUserNeedle": "{sub=honest-op-test-subject, iss=https://honest-idp.professos/kMQsMo5CJU0}",
+  "EvilUserNeedle": "{sub=evil-op-test-subject, iss=https://attack-idp.professos/kMQsMo5CJU0}",
+  "ProfileUrl": "https://angular-auth-oidc-client"
+}
