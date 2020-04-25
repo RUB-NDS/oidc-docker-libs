@@ -182,7 +182,7 @@ services:
     networks:
       - rpnet
 
-  angular-auth-oidc-sample-client:
+  angular-auth-oidc-client:
     build:
       context: ./rp/angular-auth-oidc-sample-client
       args:
