@@ -119,6 +119,9 @@ services:
     networks:
       - idpnet
 
+###
+# Keycloak
+###
   keycloak:
     build:
       context: ./idp/keycloak
@@ -155,6 +158,71 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
+    networks:
+      - idpnet
+
+###
+# Gravitee.io
+##
+
+  gravitee:
+    image: nginx:1.16-alpine
+    volumes:
+      - ./idp/gravitee/config/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      NGINX_PORT: 80
+    depends_on:
+      - gravitee-management
+      - gravitee-gateway
+      - gravitee-webui
+    networks:
+      - idpnet
+
+  gravitee-mongodb:
+    image: mongo:3.4
+    volumes:
+      - gio-datamongo:/data/db
+      - ./idp/gravitee/logs/am-mongodb:/var/log/mongodb
+    networks:
+      - idpnet
+
+  gravitee-gateway:
+    image: graviteeio/am-gateway:${GIO_AM_VERSION}
+    links:
+      - gravitee-mongodb
+    depends_on:
+      - gravitee-mongodb
+    volumes:
+      - ./idp/gravitee/logs/am-gateway:/etc/gravitee.io/log
+    environment:
+      - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+      - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+    networks:
+      - idpnet
+
+  gravitee-management:
+    image: graviteeio/am-management-api:${GIO_AM_VERSION}
+    links:
+      - gravitee-mongodb
+    depends_on:
+      - gravitee-mongodb
+    volumes:
+      - ./idp/gravitee/logs/am-management-api:/etc/gravitee.io/log
+    environment:
+      - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+      - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
+    networks:
+      - idpnet
+
+  gravitee-webui:
+    image: graviteeio/am-management-ui:${GIO_AM_VERSION}
+    depends_on:
+      - gravitee-management
+    environment:
+      - MGMT_API_URL=http://gravitee/am
+      - MGMT_UI_URL=http://gravitee/am/ui
+    volumes:
+      - ./idp/gravitee/logs/am-webui:/var/log/httpd
     networks:
       - idpnet
 
@@ -226,3 +294,4 @@ networks:
 
 volumes:
   certs:
+  gio-datamongo: {}
