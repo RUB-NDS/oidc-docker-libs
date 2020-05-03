@@ -1,0 +1,3 @@
+FROM mongo:3.4
+COPY dump.gz /dump.gz
+CMD mongorestore --host gravitee-mongodb --archive --gzip < /dump.gz

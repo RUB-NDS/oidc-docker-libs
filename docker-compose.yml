@@ -190,8 +190,16 @@ services:
   gravitee-mongodb:
     image: mongo:3.4
     volumes:
-      - gio-datamongo:/data/db
       - ./idp/gravitee/logs/am-mongodb:/var/log/mongodb
+    networks:
+      - idpnet
+
+  gravitee-mongo-seed:
+    build:
+      context: ./idp/gravitee
+      dockerfile: Dockerfile.mongo
+    links:
+      - gravitee-mongodb
     networks:
       - idpnet
 
@@ -303,4 +311,3 @@ networks:
 
 volumes:
   certs:
-  gio-datamongo: {}
