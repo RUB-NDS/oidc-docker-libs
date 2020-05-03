@@ -44,13 +44,13 @@ API:
 #### Gravitee
 
 Configuration:
-- http://gravitee/am/ui/dashboard
+- https://gravitee/am/ui/dashboard
 - User: admin
 - Password: adminadmin
 
 API:
-- http://gravitee/am/profnet/oidc/
-- http://gravitee/am/profnet/oidc/.well-known/openid-configuration
+- https://gravitee/am/profnet/oidc/
+- https://gravitee/am/profnet/oidc/.well-known/openid-configuration
 
 #### Identity Server4
 No Dynamic Client Registration possible!

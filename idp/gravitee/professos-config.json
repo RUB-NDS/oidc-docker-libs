@@ -1,5 +1,5 @@
 {
-  "UrlOPTarget": "http://gravitee/am/profnet/oidc/",
+  "UrlOPTarget": "https://gravitee/am/profnet/oidc/",
   "OPMetadata": "",
   "AccessToken1": "",
   "AccessToken2": "",

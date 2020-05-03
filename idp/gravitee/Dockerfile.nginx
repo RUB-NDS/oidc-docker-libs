@@ -8,6 +8,6 @@ ARG CA_CERT="oidc-ca.crt"
 VOLUME ["$CA_DIR"]
 
 COPY config/nginx.conf /etc/nginx/nginx.conf
-RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /etc/nginx/nginx.conf
+RUN sed -i "s#SERVER_HOST#$SERVER_HOST#g" /etc/nginx/nginx.conf
 
 RUN echo "https://$CONTROLLER_URL" > /usr/share/nginx/html/.professos
