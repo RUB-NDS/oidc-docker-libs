@@ -82,6 +82,7 @@ services:
     build:
       context: ./idp/mitreid-server
       args:
+        BRANCH: "mitreid-connect-1.3.3"
         ISSUER: ${MITREID_SERVER_HOST}
         MITREID_SERVER_HOST: ${MITREID_SERVER_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}

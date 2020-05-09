@@ -1,22 +1,18 @@
 FROM maven:3-jdk-8 as builder
 # based on https://github.com/ghchinoy/mitreidconnect-docker
 
-ENV HOME /opt/mitreidc
+ARG HOME=/opt/mitreidc
 
 # default to 1.3.x (latest stable);  master is the development branch.
 # Override from docker build --build-arg if you want.
-#ARG BRANCH=master
 ARG BRANCH=1.3.x
 ARG ISSUER=localhost:8080
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y git wget sudo && apt-get clean && \
-	mkdir -p $HOME
-
-# Install
+RUN	mkdir -p $HOME
 WORKDIR $HOME
 
 # fetch the source code using provided branch
-RUN git clone --branch $BRANCH https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server.git . 
+RUN git clone --branch $BRANCH --single-branch https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server.git .
 
 # compile
 RUN mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true clean package
