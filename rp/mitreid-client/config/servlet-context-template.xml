@@ -95,7 +95,7 @@
 		-->
 		<bean class="org.mitre.openid.connect.client.SubjectIssuerGrantedAuthority">
 			<constructor-arg name="subject" value="90342.ASDFJWFA" />
-			<constructor-arg name="issuer" value="https://${ISSUER}/" />
+			<constructor-arg name="issuer" value="https://$ISSUER/" />
 		</bean>
 	</util:set>
 

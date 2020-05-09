@@ -34,7 +34,7 @@
 	    
 	    <!-- This property sets the root URL of the server, known as the issuer -->
 	    <!--<property name="issuer" value="http://{ISSUER}/oidc-server/" /> -->
-	    <property name="issuer" value="https://${MITREID_SERVER_HOST}/oidc-server/" />
+	    <property name="issuer" value="https://$SERVER_HOST/oidc-server/" />
 		
 		<!-- This property is a URL pointing to a logo image 24px high to be used in the top bar -->
  		<property name="logoImageUrl" value="resources/images/openid_connect_small.png" />
