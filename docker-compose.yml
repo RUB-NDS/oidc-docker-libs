@@ -254,7 +254,7 @@ services:
       args:
         ISSUER: ${HONEST_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
-        MITREID_CLIENT_HOST: ${MITREID_CLIENT_HOST}
+        CLIENT_HOST: ${MITREID_CLIENT_HOST}
     depends_on:
       - certs
     volumes:

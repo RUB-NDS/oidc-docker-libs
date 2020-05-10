@@ -130,7 +130,7 @@
 		Static issuer service, returns the same issuer for every request.
 	-->
 	<bean class="org.mitre.openid.connect.client.service.impl.StaticSingleIssuerService" id="staticIssuerService">
-		<property name="issuer" value="https://${ISSUER}/" />
+		<property name="issuer" value="https://$ISSUER/" />
 	</bean>	
 
 	<!-- 
@@ -177,13 +177,13 @@
 	<bean class="org.mitre.openid.connect.client.service.impl.StaticServerConfigurationService">
 		<property name="servers">
 			<map>
-				<entry key="https://${ISSUER}/">
+				<entry key="https://$ISSUER/">
 					<bean class="org.mitre.openid.connect.config.ServerConfiguration">
-						<property name="issuer" value="https://${ISSUER}/" />
-						<property name="authorizationEndpointUri"	value="https://${ISSUER}/authorize" />
-						<property name="tokenEndpointUri"	value="https://${ISSUER}/token" />
-						<property name="userInfoUri" value="https://${ISSUER}/userinfo" />
-						<property name="jwksUri" value="https://${ISSUER}/jwk" />
+						<property name="issuer" value="https://$ISSUER/" />
+						<property name="authorizationEndpointUri"	value="https://$ISSUER/authorize" />
+						<property name="tokenEndpointUri"	value="https://$ISSUER/token" />
+						<property name="userInfoUri" value="https://$ISSUER/userinfo" />
+						<property name="jwksUri" value="https://$ISSUER/jwk" />
 					</bean>
 				</entry>
 			</map>
@@ -202,13 +202,13 @@
 	<bean class="org.mitre.openid.connect.client.service.impl.HybridServerConfigurationService">
 		<property name="servers">
 			<map>
-				<entry key="https://${ISSUER}/">
+				<entry key="https://$ISSUER/">
 					<bean class="org.mitre.openid.connect.config.ServerConfiguration">
-						<property name="issuer" value="https://${ISSUER}/" />
-						<property name="authorizationEndpointUri"	value="https://${ISSUER}/authorize" />
-						<property name="tokenEndpointUri"	value="https://${ISSUER}/token" />
-						<property name="userInfoUri" value="https://${ISSUER}/userinfo" />
-						<property name="jwksUri" value="https://${ISSUER}/jwk" />
+						<property name="issuer" value="https://$ISSUER/" />
+						<property name="authorizationEndpointUri"	value="https://$ISSUER/authorize" />
+						<property name="tokenEndpointUri"	value="https://$ISSUER/token" />
+						<property name="userInfoUri" value="https://$ISSUER/userinfo" />
+						<property name="jwksUri" value="https://$ISSUER/jwk" />
 					</bean>
 				</entry>
 			</map>
@@ -247,12 +247,12 @@
 				<property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
 				<property name="redirectUris">
 					<set>
-						<value>https://${MITREID_CLIENT_HOST}/simple-web-app/openid_connect_login</value>
+						<value>https://$CLIENT_HOST/simple-web-app/openid_connect_login</value>
 					</set>
 				</property>
 				<!-- for signed requests -->
 				<property name="requestObjectSigningAlg" value="RS256" />
-				<property name="jwksUri" value="https://${MITREID_CLIENT_HOST}/simple-web-app/jwk" />
+				<property name="jwksUri" value="https://$CLIENT_HOST/simple-web-app/jwk" />
 			</bean>
 		</property>
 		<!-- 
@@ -277,7 +277,7 @@
 	<bean class="org.mitre.openid.connect.client.service.impl.StaticClientConfigurationService" id="staticClientConfigurationService">
 		<property name="clients">
 			<map>
-				<entry key="https://${ISSUER}/">
+				<entry key="https://$ISSUER/">
 					<bean class="org.mitre.oauth2.model.RegisteredClient">
 						<property name="clientId" value="client" />
 						<property name="clientSecret" value="secret" />
@@ -293,7 +293,7 @@
 						<property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
 						<property name="redirectUris">
 							<set>
-								<value>https://${MITREID_CLIENT_HOST}/simple-web-app/openid_connect_login</value>
+								<value>https://$CLIENT_HOST/simple-web-app/openid_connect_login</value>
 							</set>
 						</property>
 					</bean>
@@ -309,7 +309,7 @@
 	<bean class="org.mitre.openid.connect.client.service.impl.HybridClientConfigurationService" id="hybridClientConfigurationService">
 		<property name="clients">
 			<map>
-				<entry key="https://${ISSUER}/">
+				<entry key="https://$ISSUER/">
 					<bean class="org.mitre.oauth2.model.RegisteredClient">
 						<property name="clientId" value="client" />
 						<property name="clientSecret" value="secret" />
@@ -325,7 +325,7 @@
 						<property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
 						<property name="redirectUris">
 							<set>
-								<value>https://${MITREID_CLIENT_HOST}/simple-web-app/openid_connect_login</value>
+								<value>https://$CLIENT_HOST/simple-web-app/openid_connect_login</value>
 							</set>
 						</property>
 						
@@ -348,7 +348,7 @@
 				<property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
 				<property name="redirectUris">
 					<set>
-						<value>https://${MITREID_CLIENT_HOST}/simple-web-app/openid_connect_login</value>
+						<value>https://$CLIENT_HOST/simple-web-app/openid_connect_login</value>
 					</set>
 				</property>
 			</bean>

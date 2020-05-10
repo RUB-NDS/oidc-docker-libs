@@ -2,9 +2,6 @@ FROM maven:3.6.3-jdk-8-slim as builder
 # based on https://github.com/ghchinoy/mitreidconnect-docker
 
 ARG BUILD_HOME=/opt/mitreidc
-
-# default to 1.3.x (latest stable);  master is the development branch.
-# Override from docker build --build-arg if you want.
 ARG BRANCH=1.3.x
 ARG ISSUER=localhost:8080
 
@@ -29,6 +26,7 @@ RUN mvn dependency:go-offline
 # compile
 RUN mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true clean package
 
+# static configuration
 COPY ./config/WEB-INF ./WEB-INF
 RUN envsubst < WEB-INF/server-config-template.xml > WEB-INF/server-config.xml
 
@@ -37,15 +35,15 @@ RUN jar uf openid-connect-server-webapp/target/openid-connect-server-webapp.war 
     WEB-INF/classes/db/hsql/users.sql \
     WEB-INF/classes/db/hsql/clients.sql
 
-#####################################
-#
+########################################################################################################################
 FROM openjdk:8-jre-slim
 
-RUN apt-get update && apt-get install -y \
-    apache2 \
-    curl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get install -y \
+        apache2 \
+        curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install wildfly
 ENV WILDFLY_VERSION="16.0.0.Final"
