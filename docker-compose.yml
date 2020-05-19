@@ -128,7 +128,6 @@ services:
       context: ./idp/php-oidc-op
       args:
         BRANCH: "default"
-        ISSUER: ${PHP_OIDC_OP_HOST}
         SERVER_HOST: ${PHP_OIDC_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
     depends_on:
@@ -144,6 +143,7 @@ services:
       VIRTUAL_HOST: ${PHP_OIDC_OP_HOST}
     networks:
       - idpnet
+      - backend
 
   php-oidc-mysql:
     image: mysql:5.7.30
@@ -157,7 +157,7 @@ services:
     volumes:
       - ./idp/php-oidc-op/dump/:/docker-entrypoint-initdb.d
     networks:
-      - idpnet
+      - backend
 
 
 ###
@@ -328,6 +328,31 @@ services:
     networks:
       - rpnet
 
+  ###
+  # phpOIDC RP
+  ###
+  php-oidc-rp:
+    build:
+      context: ./rp/php-oidc-rp
+      args:
+        BRANCH: "default"
+        CLIENT_HOST: ${PHP_OIDC_RP_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+    depends_on:
+      - certs
+      - php-oidc-mysql
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${PHP_OIDC_RP_HOST}
+    networks:
+      - rpnet
+      - backend
+
 ########################################################################################################################
 # Networks & Volumes
 ########################################################################################################################
@@ -349,6 +374,12 @@ networks:
     internal: true
     driver_opts:
       com.docker.network.bridge.name: oidc-rpnet
+  backend:
+    name: backend
+    driver: bridge
+    internal: true
+    driver_opts:
+      com.docker.network.bridge.name: oidc-backend
 
 volumes:
   certs:
