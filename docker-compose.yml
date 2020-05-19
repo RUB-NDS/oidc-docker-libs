@@ -121,6 +121,46 @@ services:
       - idpnet
 
 ###
+# phpOIDC OP
+###
+  php-oidc-op:
+    build:
+      context: ./idp/php-oidc-op
+      args:
+        BRANCH: "default"
+        ISSUER: ${PHP_OIDC_OP_HOST}
+        SERVER_HOST: ${PHP_OIDC_OP_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+    depends_on:
+      - certs
+      - php-oidc-mysql
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${PHP_OIDC_OP_HOST}
+    networks:
+      - idpnet
+
+  php-oidc-mysql:
+    image: mysql:5.7.30
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root2pass"
+      MYSQL_USER: "phpoidc"
+      MYSQL_PASSWORD: "phpoidcpass"
+      MYSQL_DATABASE: "phpoidc_01"
+    volumes:
+      - ./idp/php-oidc-op/dump/:/docker-entrypoint-initdb.d
+    networks:
+      - idpnet
+
+
+###
 # Keycloak
 ###
   keycloak:
