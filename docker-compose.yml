@@ -284,6 +284,33 @@ services:
     networks:
       - idpnet
 
+  ###
+  # node-provider
+  ###
+  node-oidc-provider:
+    build:
+      context: ./idp/node-oidc-provider
+      args:
+        #ISSUER: ${HONEST_OP_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+        SERVER_HOST: ${NODE_OIDC_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      ISSUER: https://${NODE_OIDC_HOST}
+      NODE_ENV: production
+      DEBUG: oidc-provider:*
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${NODE_OIDC_HOST}
+    networks:
+      - idpnet
+
 ########################################################################################################################
 # RP
 ########################################################################################################################
@@ -352,6 +379,7 @@ services:
     networks:
       - rpnet
       - backend
+
 
 ########################################################################################################################
 # Networks & Volumes
