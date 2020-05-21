@@ -1,0 +1,28 @@
+<br>
+
+<ngb-accordion>
+  <ngb-panel title="{{op.name}}" *ngFor="let op of oplist" id="{{op.id}}">
+    <ng-template ngbPanelContent>
+      <div class="table-responsive-sm">
+        <table class="table w-auto  table-striped table-light">
+          <tr>
+            <td class="text-right">
+              URL:
+            </td>
+            <td>
+              <a href="{{op.url}}" target="_blank">{{op.url}}</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">
+              OpenID Configuration:
+            </td>
+            <td>
+              <a href="{{op.cfgurl}}" target="_blank">{{op.cfgurl}}</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

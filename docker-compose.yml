@@ -74,6 +74,28 @@ services:
           - ${HONEST_RP_HOST}
           - ${EVIL_RP_HOST}
 
+  lab:
+    build:
+      context: ./oidc-lab
+      args:
+        CA_CERT: ${CA_CERT}
+        CLIENT_HOST: ${LAB_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${LAB_HOST}
+    networks:
+      - idpnet
+      - rpnet
+      - profnet
+
+
 ########################################################################################################################
 # IdP
 ########################################################################################################################

@@ -1,0 +1,19 @@
+<div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">OIDC Lab</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" routerLink="/op" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">OpenID Provider</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="/rp" routerLinkActive="active">Relying Party</a></li>
+    </ul>
+  </div>
+</nav>
+</div>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+
