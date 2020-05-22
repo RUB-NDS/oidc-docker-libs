@@ -11,6 +11,7 @@ export const RPLIST: RpList[] = [
   { id: 2, name: 'MITREid Client', url: 'https://mitreid-client/simple-web-app/'},
   { id: 3, name: 'PHP OIDC RP', url: 'https://php-oidc-rp' },
   { id: 4, name: 'PyOIDC RP', url: 'https://pyoidc-rp' },
+  { id: 5, name: 'Mod auth openidc', url: 'https://mod-auth-openidc' },
 ];
 
 
