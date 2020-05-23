@@ -1,17 +1,16 @@
-FROM node:13-alpine3.10 AS builder
+FROM node:10.15.0-alpine AS builder
 
-ENV PATH /opt/oidc-lab/node_modules/.bin:$PATH
+ARG ISSUER
+ARG CLIENT_HOST
 
-COPY app/package.json /opt/oidc-lab/
-WORKDIR /opt/oidc-lab
-RUN npm install
-RUN npm install -g @angular/cli@9.1.5
+COPY ./app/ /app
+COPY ./config/auth.config.ts /app/src/app/
+RUN sed -i "s#ISSUER#$ISSUER#g" /app/src/app/auth.config.ts
 
-COPY app /opt/oidc-lab
+WORKDIR /app
+RUN npm i
+RUN $(npm bin)/ng build --prod
 
-RUN ng build --prod
-
-## Main image
 FROM nginx:1.17.10-alpine
 
 RUN apk update \
@@ -19,9 +18,9 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 
 RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/dist/angular-oauth2-oidc-client /usr/share/nginx/html
 
-COPY --from=builder  /opt/oidc-lab/dist/oidc-lab /usr/share/nginx/html
-
+ARG CONTROLLER_URL
 ARG CLIENT_HOST
 
 ARG CA_DIR="/certs"
@@ -30,6 +29,8 @@ VOLUME ["$CA_DIR"]
 
 COPY config/default.conf /etc/nginx/conf.d/default.conf
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /etc/nginx/conf.d/default.conf
+
+RUN echo "https://$CONTROLLER_URL" > /usr/share/nginx/html/.professos
 
 EXPOSE 80
 EXPOSE 443

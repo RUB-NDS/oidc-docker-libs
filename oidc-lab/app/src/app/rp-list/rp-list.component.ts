@@ -8,10 +8,11 @@ interface RpList {
 
 export const RPLIST: RpList[] = [
   { id: 1, name: 'Angular auth oidc', url: 'https://angular-auth-oidc-client' },
-  { id: 2, name: 'MITREid Client', url: 'https://mitreid-client/simple-web-app/'},
-  { id: 3, name: 'PHP OIDC RP', url: 'https://php-oidc-rp' },
-  { id: 4, name: 'PyOIDC RP', url: 'https://pyoidc-rp' },
-  { id: 5, name: 'Mod auth openidc', url: 'https://mod-auth-openidc' },
+  { id: 2, name: 'Angular oauth2 oidc', url: 'https://angular-oauth2-oidc-client' },
+  { id: 3, name: 'MITREid client', url: 'https://mitreid-client/simple-web-app/'},
+  { id: 4, name: 'PHP oidc', url: 'https://php-oidc-rp' },
+  { id: 5, name: 'PyOIDC', url: 'https://pyoidc-rp' },
+  { id: 6, name: 'Mod auth openidc', url: 'https://mod-auth-openidc' },
 ];
 
 
