@@ -12,7 +12,12 @@ WORKDIR /app
 RUN npm i
 RUN $(npm bin)/ng build --prod
 
-FROM nginx:1.15.8-alpine
+FROM nginx:1.17.10-alpine
+
+RUN apk update \
+    && apk add ca-certificates \
+    && rm -rf /var/cache/apk/*
+
 COPY --from=builder /app/dist/angular-auth-oidc-sample-client /usr/share/nginx/html
 
 ARG CONTROLLER_URL
@@ -26,3 +31,10 @@ COPY config/default.conf /etc/nginx/conf.d/default.conf
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /etc/nginx/conf.d/default.conf
 
 RUN echo "https://$CONTROLLER_URL" > /usr/share/nginx/html/.professos
+
+EXPOSE 80
+EXPOSE 443
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+CMD ["/docker-entrypoint.sh"]
