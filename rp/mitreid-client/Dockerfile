@@ -32,14 +32,16 @@ RUN envsubst \
 # compile simple-web-app without generating doc and tests
 RUN mvn -Dmaven.javadoc.skip=true -Dmaven.test.skip=true clean package
 
-########################################################################################################################
+################################################################################
+# Image
+################################################################################
 FROM openjdk:8-jre-slim
 
 ARG CLIENT_HOST
 ARG CONTROLLER_URL
 
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y  --no-install-recommends \
         apache2 \
         curl \
     && apt-get clean \

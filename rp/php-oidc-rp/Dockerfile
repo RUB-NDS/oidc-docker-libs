@@ -6,7 +6,7 @@ ARG CONTROLLER_URL
 ARG CLIENT_HOST
 
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y  --no-install-recommends \
        mercurial \
        nginx \
     && docker-php-ext-install pdo pdo_mysql \

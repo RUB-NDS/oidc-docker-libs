@@ -5,7 +5,7 @@ ARG CONTROLLER_URL
 ARG CLIENT_HOST
 
 RUN apt-get update \
-    && apt-get install -y \
+    && apt-get install -y  --no-install-recommends \
        nginx \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

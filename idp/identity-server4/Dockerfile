@@ -13,9 +13,12 @@ COPY config/Startup.cs .
 RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
+################################################################################
+# Image
+################################################################################
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     apache2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -49,7 +52,6 @@ RUN a2ensite server
 EXPOSE 80
 EXPOSE 443
 
-#ENTRYPOINT ["dotnet", "IdentityServer.dll"]
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
