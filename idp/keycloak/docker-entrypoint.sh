@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+while [[ ! -e ${CA_DIR}/${VIRTUAL_HOST}/${VIRTUAL_HOST}.crt ]] ; do
+    sleep 1
+done
+
 if [ ! -e /usr/share/pki/ca-trust-source/anchors/${CA_CERT} ]; then
   cp -f ${CA_DIR}/${CA_CERT} /usr/share/pki/ca-trust-source/anchors/${CA_CERT}
   update-ca-trust
