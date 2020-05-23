@@ -200,6 +200,7 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: 4dm1n
+      PROXY_ADDRESS_FORWARDING: "true"
       CA_DIR: ${CA_DIR}
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${KEYCLOAK_HOST}
