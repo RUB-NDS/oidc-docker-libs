@@ -1,5 +1,11 @@
 # oidc-lab
 
+## Minimum system requirements
+
+- 4 CPU cores
+- 8 GB RAM
+- 24 GB of free space
+
 ## Build & Run
 
 ```
@@ -20,6 +26,8 @@ Mitmproxy is configured to run in regular mode.
 Web interface could be found at http://localhost:8081
 
 ## The Lab
+
+https://lab
 
 ### Professos
  
