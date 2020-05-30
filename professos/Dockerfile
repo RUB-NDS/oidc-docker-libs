@@ -19,7 +19,8 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 FROM openjdk:11-jre-slim
 
-ARG CHROMEDRIVER_VERSION=79.0.3945.36
+#ARG CHROMEDRIVER_VERSION=79.0.3945.36
+#ARG CHROMEDRIVER_VERSION=LATEST_RELEASE_81
 ARG WILDFLY_VERSION=18.0.0.Final
 
 USER root
@@ -40,13 +41,15 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     dnsutils \
     strace \
-    chromium=79.0.\* \
+    chromium \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ###
 # install chromedriver
-RUN curl -L -O https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip \
+RUN CHROMEDRIVER_VERSION=$(dpkg -s chromium | grep ^Version: | cut -d " " -f2 | cut -d "." -f1) \
+ && CHROMEDRIVER_DL=$(echo $(curl -o - --silent https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROMEDRIVER_VERSION})) \
+ && curl -L -O https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_DL}/chromedriver_linux64.zip \
  && mkdir -p /opt/bin/ \
  && unzip chromedriver_linux64.zip -d /opt/bin/ \
  && rm -f chromedriver_linux64.zip
