@@ -22,6 +22,12 @@ fi
 
 docker-gen hosts.tpl hosts
 
+create_ssl_certificates $CONTROLLER_HOST
+create_ssl_certificates $HONEST_OP_HOST
+create_ssl_certificates $EVIL_OP_HOST
+create_ssl_certificates $HONEST_RP_HOST
+create_ssl_certificates $EVIL_RP_HOST
+
 for DOMAIN_NAME in $(cat hosts)
 do
   create_ssl_certificates ${DOMAIN_NAME}

@@ -33,7 +33,7 @@ services:
       - ./mitmproxy/scripts:/home/mitmproxy/scripts
       - certs:/certs:ro
     networks:
-      - idpnet
+      - opnet
       - rpnet
       - profnet
 
@@ -91,13 +91,13 @@ services:
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${LAB_HOST}
     networks:
-      - idpnet
+      - opnet
       - rpnet
       - profnet
 
 
 ########################################################################################################################
-# IdP
+# OpenID Provider
 ########################################################################################################################
 
   mitreid-server:
@@ -119,7 +119,7 @@ services:
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${MITREID_SERVER_HOST}
     networks:
-      - idpnet
+      - opnet
 
   identity-server4:
     build:
@@ -140,7 +140,7 @@ services:
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${IDENTITY_SERVER4_HOST}
     networks:
-      - idpnet
+      - opnet
 
 ###
 # phpOIDC OP
@@ -164,7 +164,7 @@ services:
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${PHP_OIDC_OP_HOST}
     networks:
-      - idpnet
+      - opnet
       - backend
 
   php-oidc-mysql:
@@ -177,7 +177,7 @@ services:
       MYSQL_PASSWORD: "phpoidcpass"
       MYSQL_DATABASE: "phpoidc_01"
     volumes:
-      - ./idp/php-oidc-op/dump/:/docker-entrypoint-initdb.d
+      - ./op/php-oidc-op/dump/:/docker-entrypoint-initdb.d
     networks:
       - backend
 
@@ -212,18 +212,19 @@ services:
     env_file:
       - .proxy_env
     networks:
-      - idpnet
+      - opnet
+      - backend
 
   keycloak-postgres:
     image: postgres:11
     volumes:
-    -  ./idp/keycloak/config/keycloak.sql:/docker-entrypoint-initdb.d/keycloak-code.sql
+    -  ./op/keycloak/config/keycloak.sql:/docker-entrypoint-initdb.d/keycloak-code.sql
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password
     networks:
-      - idpnet
+      - backend
 
 ###
 # Gravitee.io
@@ -249,14 +250,15 @@ services:
       - gravitee-webui
       - certs
     networks:
-      - idpnet
+      - opnet
+      - backend
 
   gravitee-mongodb:
     image: mongo:3.4
     volumes:
-      - ./idp/gravitee/logs/am-mongodb:/var/log/mongodb
+      - ./op/gravitee/logs/am-mongodb:/var/log/mongodb
     networks:
-      - idpnet
+      - backend
 
   gravitee-mongo-seed:
     build:
@@ -265,7 +267,7 @@ services:
     links:
       - gravitee-mongodb
     networks:
-      - idpnet
+      - backend
 
   gravitee-gateway:
     image: graviteeio/am-gateway:${GIO_AM_VERSION}
@@ -274,12 +276,12 @@ services:
     depends_on:
       - gravitee-mongodb
     volumes:
-      - ./idp/gravitee/logs/am-gateway:/etc/gravitee.io/log
+      - ./op/gravitee/logs/am-gateway:/etc/gravitee.io/log
     environment:
       - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
     networks:
-      - idpnet
+      - backend
 
   gravitee-management:
     image: graviteeio/am-management-api:${GIO_AM_VERSION}
@@ -288,12 +290,12 @@ services:
     depends_on:
       - gravitee-mongodb
     volumes:
-      - ./idp/gravitee/logs/am-management-api:/etc/gravitee.io/log
+      - ./op/gravitee/logs/am-management-api:/etc/gravitee.io/log
     environment:
       - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
     networks:
-      - idpnet
+      - backend
 
   gravitee-webui:
     image: graviteeio/am-management-ui:${GIO_AM_VERSION}
@@ -303,9 +305,9 @@ services:
       - MGMT_API_URL=https://gravitee/am
       - MGMT_UI_URL=https://gravitee/am/ui
     volumes:
-      - ./idp/gravitee/logs/am-webui:/var/log/httpd
+      - ./op/gravitee/logs/am-webui:/var/log/httpd
     networks:
-      - idpnet
+      - backend
 
   ###
   # node-provider
@@ -332,7 +334,7 @@ services:
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${NODE_OIDC_HOST}
     networks:
-      - idpnet
+      - opnet
 
 ########################################################################################################################
 # RP
@@ -473,12 +475,12 @@ networks:
     driver: bridge
     driver_opts:
       com.docker.network.bridge.name: oidc-profnet
-  idpnet:
-    name: idpnet
+  opnet:
+    name: opnet
     driver: bridge
     internal: true
     driver_opts:
-      com.docker.network.bridge.name: oidc-idpnet
+      com.docker.network.bridge.name: oidc-opnet
   rpnet:
     name: rpnet
     driver: bridge
