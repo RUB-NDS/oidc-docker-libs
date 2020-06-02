@@ -13,6 +13,7 @@ export const RPLIST: RpList[] = [
   { id: 4, name: 'PHP oidc', url: 'https://php-oidc-rp' },
   { id: 5, name: 'PyOIDC', url: 'https://pyoidc-rp' },
   { id: 6, name: 'Mod auth openidc', url: 'https://mod-auth-openidc' },
+  { id: 7, name: 'Node openid', url: 'https://express-openid-client' },
 ];
 
 
