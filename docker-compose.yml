@@ -420,25 +420,25 @@ services:
     networks:
       - rpnet
 
-#  pyoidc-rp:
-#    build:
-#      context: ./rp/pyoidc-rp
-#      args:
-#        ISSUER: ${HONEST_OP_HOST}
-#        CONTROLLER_URL: ${CONTROLLER_HOST}
-#        CLIENT_HOST: ${PYOIDC_CLIENT_HOST}
-#    depends_on:
-#      - certs
-#    volumes:
-#      - certs:/certs:ro
-#    env_file:
-#      - .proxy_env
-#    environment:
-#      CA_DIR: ${CA_DIR}
-#      CA_CERT: ${CA_CERT}
-#      VIRTUAL_HOST: ${PYOIDC_CLIENT_HOST}
-#    networks:
-#      - rpnet
+  pyoidc-rp:
+    build:
+      context: ./rp/pyoidc-rp
+      args:
+        ISSUER: ${HONEST_OP_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+        CLIENT_HOST: ${PYOIDC_CLIENT_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${PYOIDC_CLIENT_HOST}
+    networks:
+      - rpnet
 
   mod-auth-openidc:
     build:

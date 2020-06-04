@@ -9,6 +9,12 @@ if [ ! -e /usr/local/share/ca-certificates/${CA_CERT} ]; then
   update-ca-certificates
 fi
 
-python rp.py -p 4242 -b https://pyoidc-rp settings.yaml &
+export BASE_URI=https://${VIRTUAL_HOST}
+export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+export FLASK_APP=oidc
+export FLASK_ENV=development
+
+
+python oidc.py &
 
 nginx -g 'daemon off;'

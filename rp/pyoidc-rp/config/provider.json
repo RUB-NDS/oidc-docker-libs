@@ -1,0 +1,7 @@
+{
+  "default": {
+    "issuer": "https://ISSUER/",
+    "client_id": "abc",
+    "client_secret": "def"
+  }
+}
