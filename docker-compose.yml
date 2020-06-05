@@ -255,8 +255,6 @@ services:
 
   gravitee-mongodb:
     image: mongo:3.4
-    volumes:
-      - ./op/gravitee/logs/am-mongodb:/var/log/mongodb
     networks:
       - backend
 
@@ -275,8 +273,6 @@ services:
       - gravitee-mongodb
     depends_on:
       - gravitee-mongodb
-    volumes:
-      - ./op/gravitee/logs/am-gateway:/etc/gravitee.io/log
     environment:
       - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
@@ -289,8 +285,6 @@ services:
       - gravitee-mongodb
     depends_on:
       - gravitee-mongodb
-    volumes:
-      - ./op/gravitee/logs/am-management-api:/etc/gravitee.io/log
     environment:
       - gravitee_management_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
       - gravitee_oauth2_mongodb_uri=mongodb://gravitee-mongodb:27017/graviteeam?serverSelectionTimeoutMS=5000&connectTimeoutMS=5000&socketTimeoutMS=5000
@@ -304,8 +298,6 @@ services:
     environment:
       - MGMT_API_URL=https://gravitee/am
       - MGMT_UI_URL=https://gravitee/am/ui
-    volumes:
-      - ./op/gravitee/logs/am-webui:/var/log/httpd
     networks:
       - backend
 
