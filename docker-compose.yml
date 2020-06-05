@@ -240,7 +240,7 @@ services:
     volumes:
       - certs:/certs:ro
     environment:
-      NGINX_PORT: 80
+      NGINX_PORT: 443
       CA_DIR: ${CA_DIR}
       CA_CERT: ${CA_CERT}
       VIRTUAL_HOST: ${GRAVITEE_HOST}
