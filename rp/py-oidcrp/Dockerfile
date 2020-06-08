@@ -26,8 +26,9 @@ RUN mv /usr/local/src/JWTConnect-Python-OidcRP/flask_rp/* . \
     && rm -rf /usr/local/src/*
 RUN pip install -r requirements.txt
 
-#COPY config/conf.yaml /app/
-#RUN sed -i "s#ISSUER#$ISSUER#g" /app/conf.yaml
+COPY config/conf.yaml /app/
+RUN sed -i "s#ISSUER#$ISSUER#g" /app/conf.yaml
+RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /app/conf.yaml
 
 # Allow professos
 RUN echo "https://$CONTROLLER_URL" > /var/www/html/.professos
