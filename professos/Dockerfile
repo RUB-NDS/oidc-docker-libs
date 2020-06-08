@@ -90,6 +90,7 @@ ARG SKIP_TARGET_GRANT="false"
 ARG DISABLE_TLS_TRUST_CHECK="false"
 ARG PRINT_TEST_ID_PATH="true"
 ARG TEST_ID_LENGTH=8
+ARG OPIV_ALLOW_CUSTOM_TEST_ID="true"
 
 USER jboss
 # add wildfly config (enables proxy-address-forwarding in default http listener; required when Wildfly runs
