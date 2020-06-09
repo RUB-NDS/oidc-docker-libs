@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS builder
 
-ARG BRANCH="3.1.2"
+ARG BRANCH="3.1.3"
 
 WORKDIR /checkout
 RUN git clone --branch $BRANCH https://github.com/IdentityServer/IdentityServer4.git .
