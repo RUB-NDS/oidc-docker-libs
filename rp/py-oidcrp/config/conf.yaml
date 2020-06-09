@@ -87,7 +87,7 @@ services: &id002
 
 clients:
   professos:
-    issuer: https://ISSUER/
+    issuer: https://ISSUER/profnet/
     redirect_uris:
       - "https://{domain}/authz_cb/professos"
     post_logout_redirect_uris:
