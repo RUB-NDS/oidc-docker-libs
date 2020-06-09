@@ -6,8 +6,8 @@ FROM mitmproxy/mitmproxy
 RUN apk add --no-cache bash dnsmasq
 
 # Install Forego, copied from https://dl.equinox.io/ddollar/forego/stable
-ADD https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz ./
-RUN tar xvf forego-stable-linux-amd64.tgz -C /usr/local/bin && \
+RUN wget --quiet https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz && \
+    tar xvf forego-stable-linux-amd64.tgz -C /usr/local/bin && \
     rm forego-stable-linux-amd64.tgz && \
     chmod u+x /usr/local/bin/forego
 
