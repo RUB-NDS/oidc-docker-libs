@@ -1,3 +1,28 @@
+# OP
+
+## Gravitee 
+* Professos fails because of missing subject_types_supported
+``` 
+subject_types_supported was removed with 3.0.0
+https://github.com/gravitee-io/issues/issues/3614
+```
+
+## Keycloak
+
+* No issues found
+
+## mitreid-server
+
+* No issues found
+
+## php-oidc-op
+
+* No issues known
+
+
+
+RP
+========================================================================================================================
 
 ## mod-auth-openidc
 * Dynamic registration works
