@@ -186,6 +186,15 @@
 						<property name="jwksUri" value="https://$ISSUER/jwk" />
 					</bean>
 				</entry>
+				<entry key="https://keycloak/auth/realms/master/">
+					<bean class="org.mitre.openid.connect.config.ServerConfiguration">
+						<property name="issuer" value="https://keycloak/auth/realms/master/" />
+						<property name="authorizationEndpointUri"	value="https://keycloak/auth/realms/master/protocol/openid-connect/auth" />
+						<property name="tokenEndpointUri"	value="https://keycloak/auth/realms/master/protocol/openid-connect/token" />
+						<property name="userInfoUri" value="https://keycloak/auth/realms/master/protocol/openid-connect/userinfo" />
+						<property name="jwksUri" value="https://keycloak/auth/realms/master/protocol/openid-connect/certs" />
+					</bean>
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -209,6 +218,15 @@
 						<property name="tokenEndpointUri"	value="https://$ISSUER/token" />
 						<property name="userInfoUri" value="https://$ISSUER/userinfo" />
 						<property name="jwksUri" value="https://$ISSUER/jwk" />
+					</bean>
+				</entry>
+				<entry key="https://keycloak/auth/realms/master/">
+					<bean class="org.mitre.openid.connect.config.ServerConfiguration">
+						<property name="issuer" value="https://keycloak/auth/realms/master/" />
+						<property name="authorizationEndpointUri"	value="https://keycloak/auth/realms/master/protocol/openid-connect/auth" />
+						<property name="tokenEndpointUri"	value="https://keycloak/auth/realms/master/protocol/openid-connect/token" />
+						<property name="userInfoUri" value="https://keycloak/auth/realms/master/protocol/openid-connect/userinfo" />
+						<property name="jwksUri" value="https://keycloak/auth/realms/master/protocol/openid-connect/certs" />
 					</bean>
 				</entry>
 			</map>
@@ -278,6 +296,27 @@
 		<property name="clients">
 			<map>
 				<entry key="https://$ISSUER/">
+					<bean class="org.mitre.oauth2.model.RegisteredClient">
+						<property name="clientId" value="client" />
+						<property name="clientSecret" value="secret" />
+						<property name="scope">
+							<set value-type="java.lang.String">
+								<value>openid</value>
+								<value>email</value>
+								<value>address</value>
+								<value>profile</value>
+								<value>phone</value>
+							</set>
+						</property>
+						<property name="tokenEndpointAuthMethod" value="SECRET_BASIC" />
+						<property name="redirectUris">
+							<set>
+								<value>https://$CLIENT_HOST/simple-web-app/openid_connect_login</value>
+							</set>
+						</property>
+					</bean>
+				</entry>
+				<entry key="https://keycloak/auth/realms/master/">
 					<bean class="org.mitre.oauth2.model.RegisteredClient">
 						<property name="clientId" value="client" />
 						<property name="clientSecret" value="secret" />
