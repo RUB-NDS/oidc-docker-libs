@@ -41,6 +41,8 @@ RUN chown -R www-data: /var/www/html
 USER www-data
 
 COPY --chown=www-data:www-data html/ /var/www/html/
+
+# a good explanation for dynamic client registration could be found here https://devhub.io/repos/pingidentity-mod_auth_openidc
 COPY --chown=www-data:www-data metadata/ /var/cache/apache2/mod_auth_openidc/metadata/
 # Allow professos
 RUN echo "https://$CONTROLLER_URL" > /var/www/html/.professos
