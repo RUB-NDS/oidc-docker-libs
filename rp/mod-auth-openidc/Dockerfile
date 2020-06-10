@@ -40,8 +40,8 @@ RUN curl -sLSf "$OPENIDC_VERSION_DEB_URL" -o mod_auth_openidc-$OPENIDC_VERSION.d
 RUN chown -R www-data: /var/www/html
 USER www-data
 
-COPY html/ /var/www/html/
-
+COPY --chown=www-data:www-data html/ /var/www/html/
+COPY --chown=www-data:www-data metadata/ /var/cache/apache2/mod_auth_openidc/metadata/
 # Allow professos
 RUN echo "https://$CONTROLLER_URL" > /var/www/html/.professos
 
