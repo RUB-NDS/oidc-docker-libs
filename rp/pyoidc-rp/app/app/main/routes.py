@@ -28,6 +28,14 @@ def login():
              userinfo=user_session.userinfo)
     return redirect(url_for('main.profile'))
 
+@bp.route('/login2')
+@auth.oidc_auth('keycloak')     # must match with provider name in provider.json!
+def login2():
+    user_session = UserSession(session)
+    user_session.update(access_token=user_session.access_token,
+                        id_token=user_session.id_token,
+                        userinfo=user_session.userinfo)
+    return redirect(url_for('main.profile'))
 
 @bp.route('/profile')
 def profile():
@@ -43,11 +51,4 @@ def profile():
                            id_token=user_session.id_token,
                            userinfo=user_session.userinfo,
                            authorized=(is_authorized)
-                           )
-
-@bp.route('/logout_test')
-@auth.oidc_logout
-def logout():
-    return render_template('logout.html',
-                           title=('Logout')
                            )

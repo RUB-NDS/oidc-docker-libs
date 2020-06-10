@@ -1,7 +1,8 @@
 {
   "default": {
-    "issuer": "https://ISSUER/",
-    "client_id": "abc",
-    "client_secret": "def"
+    "issuer": "https://gravitee/am/profnet/oidc/"
+  },
+  "keycloak": {
+    "issuer": "https://keycloak/auth/realms/master/"
   }
 }

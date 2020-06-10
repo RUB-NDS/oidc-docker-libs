@@ -47,3 +47,12 @@ RP
 * Dynamic registration for keycloak works
 * auth with response_types "code" works, other response_types "code id_token token" produce errors but tokens retrieved in URL
 * implicit/hybrid callback /ihf_cb does not work (python error)
+
+## pyoidc-rp
+
+* Dynamic registration does not work
+```
+pyoidc-rp_1                   |     self._client_metadata = ClientMetadata(redirect_uris=redirect_uris, **resp.json())
+pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values for keyword argument 'redirect_uris'
+```
+* Static configuration could be done, but ISSUER must be online before app starts, else it crashes during app initialization
