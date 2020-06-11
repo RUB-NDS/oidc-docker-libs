@@ -23,6 +23,7 @@ ENV SUBDIR ${SRCDIR}/${INSTDIR}
 WORKDIR ${SRCDIR}
 RUN git clone --depth=1 --branch=$BRANCH https://github.com/panva/node-oidc-provider.git
 WORKDIR ${INSTDIR}
+COPY config/*.js example/support/
 RUN npm install
 
 
@@ -32,7 +33,7 @@ ARG CA_DIR="/certs"
 ARG CA_CERT="oidc-ca.crt"
 VOLUME ["$CA_DIR"]
 
-COPY apache-ssl.conf /etc/apache2/sites-available/ssl.conf
+COPY config/apache-ssl.conf /etc/apache2/sites-available/ssl.conf
 
 RUN sed -i "s#SERVER_HOST#$SERVER_HOST#g" /etc/apache2/sites-available/ssl.conf
 
@@ -41,7 +42,7 @@ RUN a2ensite ssl
 
 RUN echo "https://$CONTROLLER_URL" > /var/www/html/.professos
 
-COPY run.sh ${SUBDIR}/
+COPY docker-entrypoint.sh ${SUBDIR}/
 
 WORKDIR ${SUBDIR}
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

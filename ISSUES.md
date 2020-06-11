@@ -19,7 +19,9 @@ https://github.com/gravitee-io/issues/issues/3614
 
 * No issues known
 
+## node-oidc-provider
 
+* login could be done with any user/password combination and does provide static configured Account John
 
 RP
 ========================================================================================================================
@@ -45,6 +47,7 @@ RP
 ## py-oidcrp
 
 * Dynamic registration for keycloak works
+* Professos issuer must contain OPIV TEST ID: "profnet"
 * auth with response_types "code" works, other response_types "code id_token token" produce errors but tokens retrieved in URL
 * implicit/hybrid callback /ihf_cb does not work (python error)
 
