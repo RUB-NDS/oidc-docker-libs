@@ -1596,6 +1596,9 @@ COPY public.client (id, enabled, full_scope_allowed, client_id, not_before, publ
 4a060085-95bc-4723-9d60-3ac63484f919	t	f	broker	0	f	2e5341d9-5428-4333-9d8d-c79127c64176	\N	f	\N	f	master	openid-connect	0	f	f	${client_broker}	f	client-secret	\N	\N	\N	t	f	f	f
 5373b568-d117-4882-8325-1dc15d4cbdaf	t	f	security-admin-console	0	t	75166554-63f9-474d-876e-7709a7ee111e	/admin/master/console/	f	\N	f	master	openid-connect	0	f	f	${client_security-admin-console}	f	client-secret	${authAdminUrl}	\N	\N	t	f	f	f
 328db07a-61b1-4978-bcbc-e51ac75f6fe9	t	f	admin-cli	0	t	38052714-da05-453c-87ea-b6887ea21973	\N	f	\N	f	master	openid-connect	0	f	f	${client_admin-cli}	f	client-secret	\N	\N	\N	f	f	t	f
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	t	t	express-node	0	t	43681d08-d157-4f75-a0c7-c0d066e49c46	\N	f	https://express-openid-client/	f	master	openid-connect	-1	f	f	\N	f	client-secret	https://express-openid-client/	\N	\N	t	t	t	f
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	t	t	angular-oauth2-oidc-client	0	t	41f9971a-4d86-4b73-961b-c1388e3a206c	\N	f	https://angular-oauth2-oidc-client/	f	master	openid-connect	-1	f	f	\N	f	client-secret	https://angular-oauth2-oidc-client/	\N	\N	t	t	t	f
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	t	t	angular-auth-oidc	0	t	68964bfd-7659-47de-b540-32116ddf18a6	\N	f	https://angular-auth-oidc-client/	f	master	openid-connect	-1	f	f	\N	f	client-secret	https://angular-auth-oidc-client/	\N	\N	t	t	t	f
 \.
 
 
@@ -1606,6 +1609,45 @@ COPY public.client (id, enabled, full_scope_allowed, client_id, not_before, publ
 COPY public.client_attributes (client_id, value, name) FROM stdin;
 7c9b3b6d-b482-4861-9ba5-48c2a9dcd034	S256	pkce.code.challenge.method
 5373b568-d117-4882-8325-1dc15d4cbdaf	S256	pkce.code.challenge.method
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.server.signature
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.server.signature.keyinfo.ext
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.assertion.signature
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.client.signature
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.encrypt
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.authnstatement
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.onetimeuse.condition
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml_force_name_id_format
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.multivalued.roles
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	saml.force.post.binding
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	exclude.session.state.from.auth.response
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	tls.client.certificate.bound.access.tokens
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	false	display.on.consent.screen
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.server.signature
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.server.signature.keyinfo.ext
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.assertion.signature
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.client.signature
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.encrypt
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.authnstatement
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.onetimeuse.condition
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml_force_name_id_format
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.multivalued.roles
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	saml.force.post.binding
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	exclude.session.state.from.auth.response
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	tls.client.certificate.bound.access.tokens
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	false	display.on.consent.screen
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.server.signature
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.server.signature.keyinfo.ext
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.assertion.signature
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.client.signature
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.encrypt
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.authnstatement
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.onetimeuse.condition
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml_force_name_id_format
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.multivalued.roles
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	saml.force.post.binding
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	exclude.session.state.from.auth.response
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	tls.client.certificate.bound.access.tokens
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	false	display.on.consent.screen
 \.
 
 
@@ -1751,6 +1793,33 @@ COPY public.client_scope_client (client_id, scope_id, default_scope) FROM stdin;
 5373b568-d117-4882-8325-1dc15d4cbdaf	4327a8a4-e647-44fc-8523-c62f8f03ca49	f
 5373b568-d117-4882-8325-1dc15d4cbdaf	a4556a96-c05e-4d42-aad2-9d502b18e131	f
 5373b568-d117-4882-8325-1dc15d4cbdaf	40bb10bc-9071-4447-a313-d41f753f7954	f
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	b57d35ad-76af-46d7-988f-6a7237d821df	t
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	ee056d72-8659-40b6-9a4e-cdb5ecc73c8a	t
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	e6637610-efc7-4bd4-aa0a-60dd1040ff3c	t
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	da60f342-fa2d-4ef5-8fda-ad9d8b45963e	t
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	32397e1a-798c-4bcb-b827-da16036d32b9	t
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	75a527c6-eed6-4100-a465-ef6bcf098264	f
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	4327a8a4-e647-44fc-8523-c62f8f03ca49	f
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	a4556a96-c05e-4d42-aad2-9d502b18e131	f
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	40bb10bc-9071-4447-a313-d41f753f7954	f
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	b57d35ad-76af-46d7-988f-6a7237d821df	t
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	ee056d72-8659-40b6-9a4e-cdb5ecc73c8a	t
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	e6637610-efc7-4bd4-aa0a-60dd1040ff3c	t
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	da60f342-fa2d-4ef5-8fda-ad9d8b45963e	t
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	32397e1a-798c-4bcb-b827-da16036d32b9	t
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	75a527c6-eed6-4100-a465-ef6bcf098264	f
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	4327a8a4-e647-44fc-8523-c62f8f03ca49	f
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	a4556a96-c05e-4d42-aad2-9d502b18e131	f
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	40bb10bc-9071-4447-a313-d41f753f7954	f
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	b57d35ad-76af-46d7-988f-6a7237d821df	t
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	ee056d72-8659-40b6-9a4e-cdb5ecc73c8a	t
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	e6637610-efc7-4bd4-aa0a-60dd1040ff3c	t
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	da60f342-fa2d-4ef5-8fda-ad9d8b45963e	t
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	32397e1a-798c-4bcb-b827-da16036d32b9	t
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	75a527c6-eed6-4100-a465-ef6bcf098264	f
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	4327a8a4-e647-44fc-8523-c62f8f03ca49	f
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	a4556a96-c05e-4d42-aad2-9d502b18e131	f
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	40bb10bc-9071-4447-a313-d41f753f7954	f
 \.
 
 
@@ -2208,6 +2277,7 @@ cb7dadb9-3777-4acb-b427-cfc9f05db45b	master	f	${role_uma_authorization}	uma_auth
 
 COPY public.migration_model (id, version, update_time) FROM stdin;
 rrctg	9.0.3	1587483448
+wwicl	10.0.2	1591856872
 \.
 
 
@@ -2528,6 +2598,9 @@ COPY public.redirect_uris (client_id, value) FROM stdin;
 59dce76d-31c7-4e34-8ad9-b4482633e358	/realms/master/account/*
 7c9b3b6d-b482-4861-9ba5-48c2a9dcd034	/realms/master/account/*
 5373b568-d117-4882-8325-1dc15d4cbdaf	/admin/master/console/*
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	https://express-openid-client/*
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	https://angular-oauth2-oidc-client/*
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	https://angular-auth-oidc-client/*
 \.
 
 
@@ -2784,6 +2857,9 @@ COPY public.username_login_failure (realm_id, username, failed_login_not_before,
 
 COPY public.web_origins (client_id, value) FROM stdin;
 5373b568-d117-4882-8325-1dc15d4cbdaf	+
+2c921c55-45b9-47e6-b5d4-1dc65f009a7a	https://express-openid-client
+6bd6e1fa-3c19-4bde-a5d4-17e8b5f2c5af	https://angular-oauth2-oidc-client
+7c6ca6bc-d284-4513-92cf-18b5e44ce99d	https://angular-auth-oidc-client
 \.
 
 

@@ -40,8 +40,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.oidcSecurityService.logoff();
   }
 
+  // Implicit Flow
   private doCallbackLogicIfRequired() {
+    if (window.location.hash) {
+      this.oidcSecurityService.authorizedImplicitFlowCallback();
+    }
+  }
+
+  // Code Flow
+  /*
+   private doCallbackLogicIfRequired() {
     // Will do a callback, if the url has a code and state parameter.
     this.oidcSecurityService.authorizedCallbackWithCode(window.location.toString());
   }
+   */
 }
