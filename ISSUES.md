@@ -71,3 +71,11 @@ pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values fo
 * Dynamic registration seems to be not supported with this client, nothing found in API documentation
 * node does not respect HTTP_PROXY settings -> mitmproxy could not be used
 * only one provider could be configured. On site load provider should be up, else it runs into timeout after 2400ms. Site must be reloaded afterwards
+
+
+## angular-oauth2-oidc-client
+
+* No dynamic registration
+* ISSUER must run, before site is displayed correctly
+
+##

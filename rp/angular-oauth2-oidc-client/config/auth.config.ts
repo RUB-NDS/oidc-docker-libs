@@ -1,11 +1,11 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 
 export const authCodeFlowConfig: AuthConfig = {
-    issuer: 'https://ISSUER',
+    issuer: 'https://keycloak/auth/realms/master',
     redirectUri: window.location.origin + '/index.html',
-    clientId: 'spa',
-    responseType: 'code',
-    scope: 'openid profile email offline_access api',
+    clientId: 'angular-oauth2-oidc-client',
+    responseType: 'id_token token',
+    scope: 'openid profile email',
     showDebugInformation: true,
     timeoutFactor: 0.01
 };
