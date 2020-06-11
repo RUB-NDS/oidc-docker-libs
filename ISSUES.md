@@ -51,7 +51,7 @@ RP
 
 ## py-oidcrp
 
-* Dynamic registration for keycloak works
+* Dynamic registration works with keycloak
 * Professos issuer must contain OPIV TEST ID: "profnet"
 * auth with response_types "code" works, other response_types "code id_token token" produce errors but tokens retrieved in URL
 * implicit/hybrid callback /ihf_cb does not work (python error)
@@ -78,4 +78,6 @@ pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values fo
 * No dynamic registration
 * ISSUER must run, before site is displayed correctly
 
-##
+## angular-auth-oidc
+
+* No dynamic registration
