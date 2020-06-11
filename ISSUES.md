@@ -56,3 +56,9 @@ pyoidc-rp_1                   |     self._client_metadata = ClientMetadata(redir
 pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values for keyword argument 'redirect_uris'
 ```
 * Static configuration could be done, but ISSUER must be online before app starts, else it crashes during app initialization
+
+## node openid (express-openid-client)
+
+* Dynamic registration seems to be not supported with this client, nothing found in API documentation
+* node does not respect HTTP_PROXY settings -> mitmproxy could not be used
+* only one provider could be configured. On site load provider should be up, else it runs into timeout after 2400ms. Site must be reloaded afterwards

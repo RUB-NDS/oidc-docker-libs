@@ -26,6 +26,12 @@ fi
 service ntp start
 service apache2 start
 
+export NODE_OPTIONS=--use-openssl-ca
+export HTTPS_PROXY=$https_proxy
+export HTTP_PROXY=$http_proxy
+npm config set proxy ${http_proxy} -g
+npm config set https-proxy ${https_proxy} -g
+
 echo -n "Starting login demo"
 npm start &
 

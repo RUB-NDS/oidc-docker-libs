@@ -1,4 +1,7 @@
-CLIENT_ID=YOURID
-ISSUER_BASE_URL=https://ISSUER_URL/
-APP_SESSION_SECRET='YOURSECRET'
+CLIENT_ID=express-node
+# CLIENT_SECRET=       # needed then code is used
+#ISSUER_BASE_URL=https://ISSUER_URL/
+ISSUER_BASE_URL=https://keycloak/auth/realms/master/
+APP_SESSION_SECRET='28130367-ec5d-4694-b21c-94e0f863d11e'
+BASE_URL=https://CLIENT_HOST
 PORT=3000

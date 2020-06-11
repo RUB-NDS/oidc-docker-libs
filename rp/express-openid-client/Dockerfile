@@ -31,8 +31,10 @@ RUN rm -f package-lock.json
 RUN npm install
 
 COPY conf/env .env
+COPY conf/server.js server.js
 
 RUN sed -i "s#ISSUER_URL#$ISSUER#g" .env
+RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" .env
 
 ###
 # deploy certs
