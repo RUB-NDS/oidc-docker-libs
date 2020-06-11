@@ -17,7 +17,14 @@ namespace IdentityServer
         {
             services.AddControllersWithViews();
 
-            var builder = services.AddIdentityServer()
+            var authority = "https://identity-server4";
+            var builder = services.AddIdentityServer(
+            options =>
+                {
+                    options.IssuerUri = authority;
+                    options.PublicOrigin = authority;
+                }
+            )
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis)
                 .AddInMemoryClients(Config.Clients)

@@ -23,6 +23,11 @@ https://github.com/gravitee-io/issues/issues/3614
 
 * login could be done with any user/password combination and does provide static configured Account John
 
+## identity-server4
+
+* No Dynamic Registration --> Professos?!
+
+
 RP
 ========================================================================================================================
 
@@ -58,7 +63,8 @@ RP
 pyoidc-rp_1                   |     self._client_metadata = ClientMetadata(redirect_uris=redirect_uris, **resp.json())
 pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values for keyword argument 'redirect_uris'
 ```
-* Static configuration could be done, but ISSUER must be online before app starts, else it crashes during app initialization
+* Static configuration could be done
+* ISSUER must be online before app starts, else it crashes during app initialization. Container must be restarted afterwards!!!!!
 
 ## node openid (express-openid-client)
 

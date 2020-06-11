@@ -7,7 +7,7 @@ RUN git clone --branch $BRANCH https://github.com/IdentityServer/IdentityServer4
 
 WORKDIR /app
 RUN mv /checkout/samples/Quickstarts/3_AspNetCoreAndApis/src/IdentityServer/* .
-COPY config/Startup.cs .
+COPY config/*.cs ./
 
 # Build package
 RUN dotnet restore
