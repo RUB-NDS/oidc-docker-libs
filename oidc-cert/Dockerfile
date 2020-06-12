@@ -10,6 +10,11 @@ ENV SSL_KEY_SIZE 2048
 RUN apk add --update openssl bash \
     && rm -rf /var/cache/apk/*
 
+RUN wget --quiet https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz && \
+    tar xvf forego-stable-linux-amd64.tgz -C /usr/local/bin && \
+    rm forego-stable-linux-amd64.tgz && \
+    chmod u+x /usr/local/bin/forego
+
 # install docker gen
 ARG DOCKER_GEN_VERSION=0.7.4
 
@@ -19,9 +24,10 @@ RUN wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VER
 
 ENV DOCKER_HOST unix:///tmp/docker.sock
 
+COPY docker-entrypoint.sh /
 COPY cert-gen /cert-gen
 WORKDIR "/cert-gen"
 
 VOLUME ["$CA_DIR"]
 
-CMD ["/cert-gen/docker-entrypoint.sh"]
+CMD ["/docker-entrypoint.sh"]

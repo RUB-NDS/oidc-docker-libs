@@ -61,11 +61,6 @@ API:
 - https://gravitee/am/profnet/oidc/.well-known/openid-configuration
 
 #### Identity Server4
-No Dynamic Client Registration possible!
 
 - https://identity-server4/Account/Login
 - https://identity-server4/.well-known/openid-configuration
-
-### RP
-
-- MITREid Client: https://mitreid-client/simple-web-app/
