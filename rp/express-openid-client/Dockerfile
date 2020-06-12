@@ -30,8 +30,8 @@ RUN git reset --hard $HASH
 RUN rm -f package-lock.json
 RUN npm install
 
-COPY conf/env .env
-COPY conf/server.js server.js
+COPY config/env .env
+COPY config/server.js server.js
 
 RUN sed -i "s#ISSUER_URL#$ISSUER#g" .env
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" .env
@@ -42,7 +42,7 @@ ARG CA_DIR="/certs"
 ARG CA_CERT="oidc-ca.crt"
 VOLUME ["$CA_DIR"]
 
-COPY conf/apache-ssl.conf /etc/apache2/sites-available/ssl.conf
+COPY config/apache-ssl.conf /etc/apache2/sites-available/ssl.conf
 
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /etc/apache2/sites-available/ssl.conf
 
