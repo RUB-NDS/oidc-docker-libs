@@ -55,6 +55,7 @@ RP
 * Professos issuer must contain OPIV TEST ID: "profnet"
 * auth with response_types "code" works, other response_types "code id_token token" produce errors but tokens retrieved in URL
 * implicit/hybrid callback /ihf_cb does not work (python error)
+* implicit url hash fragment is not handled
 
 ## pyoidc-rp
 
