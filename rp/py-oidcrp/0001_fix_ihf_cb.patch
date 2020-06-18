@@ -1,0 +1,48 @@
+diff --git a/flask_rp/views.py b/flask_rp/views.py
+index d146911..a8ef8ea 100644
+--- a/flask_rp/views.py
++++ b/flask_rp/views.py
+@@ -100,6 +100,7 @@ def finalize(op_hash, request_args):
+         get('client_id', rp.service_context.client_id)
+ 
+     session['state'] = request_args.get('state')
++    logger.debug('State: {}'.format(session['state']))
+ 
+     if session['state']:
+         iss = rp.session_interface.get_iss(session['state'])
+@@ -158,17 +159,29 @@ def handle_bad_request(e):
+     return 'bad request!', 400
+ 
+ 
+-@oidc_rp_views.route('/repost_fragment')
++@oidc_rp_views.route('/repost_fragment', methods=['GET', 'POST'])
+ def repost_fragment():
++    if request.method == "POST":
++        req = request.form
++        logger.debug('Args: {}'.format(req))
++
++        op_hash = req.get("op_hash")
++        fragment = request.form['url_fragment']
++        args = parse_qs(fragment)
++        logger.debug('Fragment: {}'.format(args))
++        #args = compact(parse_qs(req.get['url_fragment']))
++        return finalize(op_hash, args)
++
+     args = compact(parse_qs(request.args['url_fragment']))
+     op_hash = request.args['op_hash']
++    logger.debug('OP: {}'.format(op_hash))
+     return finalize(op_hash, args)
+ 
+-
+-@oidc_rp_views.route('/ihf_cb')
+-def ihf_cb(self, op_hash='', **kwargs):
+-    logger.debug('implicit_hybrid_flow kwargs: {}'.format(kwargs))
+-    return render_template('repost_fragment.html')
++# use static html page or generate one. Fragment got lost here!!!
++#@oidc_rp_views.route('/ihf_cb')
++#def ihf_cb(self, op_hash='', **kwargs):
++#    logger.debug('implicit_hybrid_flow kwargs: {}'.format(kwargs))
++#    return render_template('repost_fragment.html')
+ 
+ 
+ @oidc_rp_views.route('/session_iframe')

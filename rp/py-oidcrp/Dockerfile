@@ -19,6 +19,9 @@ RUN git clone --branch=$BRANCH https://github.com/IdentityPython/JWTConnect-Pyth
     && cd JWTConnect-Python-OidcRP \
     && git reset --hard $HASH
 
+WORKDIR  /usr/local/src/JWTConnect-Python-OidcRP
+COPY 0001_fix_ihf_cb.patch .
+RUN git apply 0001_fix_ihf_cb.patch
 COPY config/requirements.txt /app/
 WORKDIR /app
 
@@ -32,6 +35,7 @@ RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /app/conf.yaml
 
 # Allow professos
 RUN echo "https://$CONTROLLER_URL" > /var/www/html/.professos
+COPY config/ihf_cb_keycloak.html /var/www/html/
 
 # NGINX config
 ARG CA_DIR="/certs"
