@@ -17,6 +17,8 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
+COPY config/provider_configuration.py /usr/local/lib/python3.7/site-packages/flask_pyoidc/
+
 COPY app /app
 COPY config/provider.json /app/
 

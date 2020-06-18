@@ -59,11 +59,10 @@ RP
 
 ## pyoidc-rp
 
-* Dynamic registration does not work
-```
-pyoidc-rp_1                   |     self._client_metadata = ClientMetadata(redirect_uris=redirect_uris, **resp.json())
-pyoidc-rp_1                   | TypeError: ABCMeta object got multiple values for keyword argument 'redirect_uris'
-```
+* Dynamic registration does work with quick fix. Redirect uri from json is used without any sanity check.
+    * Registration always done with Authorization Code Flow
+    * Login could be done with Implicit Flow, but client must be reconfigured on op site to allow implicit flow
+    * Hybrid mode does not work
 * Static configuration could be done
 * ISSUER must be online before app starts, else it crashes during app initialization. Container must be restarted afterwards!!!!!
 

@@ -14,7 +14,8 @@ def parse_oidc_config(logout_uri):
         for provider in provider_data:
             config = ProviderConfiguration(issuer=provider_data[provider]['issuer'],
                                            client_registration_info=ClientRegistrationInfo(client_name='pyoidc-rp',
-                                                                                           contacts=['dev@rp.example.com'])
+                                                                                           contacts=['dev@rp.example.com']),
+                                           auth_request_params={ "response_type": "id_token token" }
                                            )
             oidc_config.update({provider: config})
     return oidc_config

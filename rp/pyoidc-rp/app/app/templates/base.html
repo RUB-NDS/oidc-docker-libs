@@ -34,7 +34,7 @@
             <a class="navbar-brand" href="{{ url_for('main.index') }}">Home</a>
             {% if authorized %}
                 <a class="navbar-brand" href="{{ url_for('main.profile') }}">Profile</a>
-                <a class="navbar-brand" href="{{ url_for('main.logout') }}">Logout</a>
+                <a class="navbar-brand" href="{{ url_for('logout') }}">Logout</a>
             {% else %}
                 <a class="navbar-brand" href="{{ url_for('main.login') }}">Login</a>
                 <a class="navbar-brand" href="{{ url_for('main.login2') }}">Login-Keycloak</a>
