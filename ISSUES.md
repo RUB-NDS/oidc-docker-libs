@@ -2,7 +2,7 @@
 
 ## Gravitee 
 * Professos fails because of missing subject_types_supported
-    * workaround added
+    * workaround added to professos (use public if required subject_types_supported is not defined)
 ``` 
 subject_types_supported was removed with 3.0.0
 https://github.com/gravitee-io/issues/issues/3614
@@ -18,7 +18,7 @@ https://github.com/gravitee-io/issues/issues/3614
 
 ## php-oidc-op
 
-* No issues known
+* No issues found
 
 ## node-oidc-provider
 
@@ -26,7 +26,7 @@ https://github.com/gravitee-io/issues/issues/3614
 
 ## identity-server4
 
-* No Dynamic Registration --> Professos?!
+* No Dynamic Registration
 
 
 RP
