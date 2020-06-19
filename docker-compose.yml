@@ -401,6 +401,8 @@ services:
         CLIENT_HOST: ${PYOIDC_CLIENT_HOST}
     depends_on:
       - certs
+      - keycloak
+      - gravitee
     volumes:
       - certs:/certs:ro
     env_file:
