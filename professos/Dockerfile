@@ -7,9 +7,11 @@ ARG gitbranch
 ARG GITHUB_TOKEN
 
 RUN git clone -b $gitbranch https://${GITHUB_TOKEN}:x-oauth-basic@github.com/RUB-NDS/PrOfESSOS-Development.git /professos
-COPY patches/001-add-proxy-and-whitelist-remote.patch /professos/001-add-proxy-and-whitelist-remote.patch
+COPY patches/*.patch /professos/
 # TODO use env file values for URL and PORT
-RUN cd /professos && git apply 001-add-proxy-and-whitelist-remote.patch
+RUN cd /professos \
+    && git apply 001-add-proxy-and-whitelist-remote.patch \
+    && git apply 002-*.patch
 RUN mkdir -p /home/app
 RUN cp -R /professos/* /home/app/
 RUN mvn -f /home/app/pom.xml clean package
