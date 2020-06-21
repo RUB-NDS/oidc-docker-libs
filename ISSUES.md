@@ -35,6 +35,7 @@ RP
 ## mod-auth-openidc
 * Dynamic registration works
 * professos could be a problem, well-known metainfos must be downloaded
+    * Only /.well-known/jwks.json will be requested by this service
 * gravitee and php-oidc-op could be used 
 * keycloak: Unrecognized field "frontchannel_logout_uri" (class org.keycloak.representations.oidc.OIDCClientRepresentation), not marked as ignorable
 
