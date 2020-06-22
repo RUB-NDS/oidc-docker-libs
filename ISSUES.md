@@ -48,12 +48,14 @@ RP
 
 ## php-oidc-rp
 
-* Dynamic registration works with php-oidc-op, with keycloak and default connection settings a metadata error will be raised
+* Dynamic registration works with php-oidc-op
+    * keycloak and default connection settings a metadata error will be raised
+    * professos raise error during learning phase, user-needle not found but should exist in response
 * implicit/hybrid should work
 
 ## py-oidcrp
 
-* Dynamic registration works with keycloak
+* Dynamic registration works with keycloak (/.well-known/openid-configuration loaded on each login attempt)
 * Professos issuer must contain OPIV TEST ID: "profnet"
 * auth with response_types "code" works, other response_types "code id_token token" produce errors but tokens retrieved in URL
 * implicit/hybrid callback /ihf_cb does not work (python error)
@@ -65,21 +67,24 @@ RP
     * Registration always done with Authorization Code Flow
     * Login could be done with Implicit Flow, but client must be reconfigured on op site to allow implicit flow
     * Hybrid mode does not work
+    * /.well-known/openid-configuration is only retrieved on startup 
 * Static configuration could be done
 * ISSUER must be online before app starts, else it crashes during app initialization. Container must be restarted afterwards!!!!!
 
 ## node openid (express-openid-client)
 
-* Dynamic registration seems to be not supported with this client, nothing found in API documentation
+* Dynamic registration is not supported by express-openid
+    * /.well-known/openid-configuration will be not requested
 * node does not respect HTTP_PROXY settings -> mitmproxy could not be used
 * only one provider could be configured. On site load provider should be up, else it runs into timeout after 2400ms. Site must be reloaded afterwards
 
 
 ## angular-oauth2-oidc-client
 
-* No dynamic registration
-* ISSUER must run, before site is displayed correctly
+* No dynamic registration (/.well-known/openid-configuration loaded on each login attempt)
+* ISSUER must run before page load
 
 ## angular-auth-oidc
 
-* No dynamic registration
+* No dynamic registration (/.well-known/openid-configuration loaded on each login attempt)
+

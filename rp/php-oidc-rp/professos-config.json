@@ -5,5 +5,5 @@
   "FinalValidUrl": "https://php-oidc-rp/index.php/loginok",
   "HonestUserNeedle": "{sub=honest-op-test-subject, iss=https://honest-idp.professos/UNVj0mZYYKg}",
   "EvilUserNeedle": "{sub=evil-op-test-subject, iss=https://attack-idp.professos/UNVj0mZYYKg}",
-  "ProfileUrl": "https://php-oidc-rp/"
+  "ProfileUrl": "https://php-oidc-rp/index.php/profile"
 }
