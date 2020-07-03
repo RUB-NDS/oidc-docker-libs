@@ -38,7 +38,7 @@ namespace IdentityServer
                     //RequirePkce = true,
                 
                     // where to redirect to after login
-                    RedirectUris = { "https://rp.professos/spO2d_7potw/callback" },
+                    RedirectUris = { "https://rp.professos/identityserver4/callback" },
 
                     // where to redirect to after logout
                     // PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
@@ -49,6 +49,28 @@ namespace IdentityServer
                         IdentityServerConstants.StandardScopes.Profile
                     },
                 },
+                new Client
+                    {
+                        ClientId = "honest-idp2",
+                        ClientName = "PrOfESSOS Honest Test-Client",
+                        // ClientSecrets = { new Secret("secret".Sha256()) },
+
+                        AllowedGrantTypes = GrantTypes.Implicit,
+                        // RequireConsent = false,
+                        //RequirePkce = true,
+
+                        // where to redirect to after login
+                        RedirectUris = { "https://rp.professos/identityserver4/callback" },
+
+                        // where to redirect to after logout
+                        // PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+
+                        AllowedScopes = new List<string>
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile
+                        },
+                    },
                 new Client
                 {
                     ClientId = "identityserver4",
