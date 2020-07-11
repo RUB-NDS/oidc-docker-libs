@@ -31,9 +31,11 @@ namespace IdentityServer
                 {
                     ClientId = "honest-idp",
                     ClientName = "PrOfESSOS Honest Test-Client",
+                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-honest") },
                     // ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    //AllowedGrantTypes = GrantTypes.Implicit,
                     // RequireConsent = false,
                     //RequirePkce = true,
                 
@@ -52,10 +54,11 @@ namespace IdentityServer
                 new Client
                     {
                         ClientId = "honest-idp2",
-                        ClientName = "PrOfESSOS Honest Test-Client",
+                        ClientName = "PrOfESSOS Evil Test-Client",
+                        ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-evil") },
                         // ClientSecrets = { new Secret("secret".Sha256()) },
 
-                        AllowedGrantTypes = GrantTypes.Implicit,
+                        AllowedGrantTypes = GrantTypes.Code,
                         // RequireConsent = false,
                         //RequirePkce = true,
 
