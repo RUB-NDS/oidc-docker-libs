@@ -41,7 +41,7 @@ services:
     build:
       context: ./professos
       args:
-        gitbranch: development
+        gitbranch: oidc-lab
         GITHUB_TOKEN: ${GITHUB_TOKEN}
         DISABLE_TLS_TRUST_CHECK: "true"
         CA_CERT: ${CA_CERT}
