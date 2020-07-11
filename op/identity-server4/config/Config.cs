@@ -36,7 +36,7 @@ namespace IdentityServer
 
                     AllowedGrantTypes = GrantTypes.Code,
                     //AllowedGrantTypes = GrantTypes.Implicit,
-                    // RequireConsent = false,
+                    RequireConsent = true,
                     //RequirePkce = true,
                 
                     // where to redirect to after login
@@ -59,7 +59,7 @@ namespace IdentityServer
                         // ClientSecrets = { new Secret("secret".Sha256()) },
 
                         AllowedGrantTypes = GrantTypes.Code,
-                        // RequireConsent = false,
+                        RequireConsent = true,
                         //RequirePkce = true,
 
                         // where to redirect to after login
