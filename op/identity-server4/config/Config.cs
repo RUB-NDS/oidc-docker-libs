@@ -31,14 +31,14 @@ namespace IdentityServer
                 {
                     ClientId = "honest-idp",
                     ClientName = "PrOfESSOS Honest Test-Client",
-                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-honest") },
+                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-honest".Sha256()) },
                     // ClientSecrets = { new Secret("secret".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                     //AllowedGrantTypes = GrantTypes.Implicit,
                     RequireConsent = true,
                     //RequirePkce = true,
-                
+
                     // where to redirect to after login
                     RedirectUris = { "https://rp.professos/identityserver4/callback" },
 
@@ -52,35 +52,35 @@ namespace IdentityServer
                     },
                 },
                 new Client
+                {
+                    ClientId = "honest-idp2",
+                    ClientName = "PrOfESSOS Evil Test-Client",
+                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-evil".Sha256()) },
+                    // ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireConsent = true,
+                    //RequirePkce = true,
+
+                    // where to redirect to after login
+                    RedirectUris = { "https://rp.professos/identityserver4/callback" },
+
+                    // where to redirect to after logout
+                    // PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
                     {
-                        ClientId = "honest-idp2",
-                        ClientName = "PrOfESSOS Evil Test-Client",
-                        ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-evil") },
-                        // ClientSecrets = { new Secret("secret".Sha256()) },
-
-                        AllowedGrantTypes = GrantTypes.Code,
-                        RequireConsent = true,
-                        //RequirePkce = true,
-
-                        // where to redirect to after login
-                        RedirectUris = { "https://rp.professos/identityserver4/callback" },
-
-                        // where to redirect to after logout
-                        // PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-
-                        AllowedScopes = new List<string>
-                        {
-                            IdentityServerConstants.StandardScopes.OpenId,
-                            IdentityServerConstants.StandardScopes.Profile
-                        },
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
                     },
+                },
                 new Client
                 {
-                    ClientId = "identityserver4",
-                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-0a7aa762fd5c") },
+                    ClientId = "py-oidcrp",
+                    ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-0a7aa762fd5c".Sha256()) },
 
-                    AllowedGrantTypes = GrantTypes.Code,
-                    // RequireConsent = false,
+                    AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                    RequireConsent = true,
                     // RequirePkce = true,
 
                     // where to redirect to after login
