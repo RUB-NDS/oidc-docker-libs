@@ -53,7 +53,7 @@ namespace IdentityServer
                 },
                 new Client
                 {
-                    ClientId = "honest-idp2",
+                    ClientId = "evil-idp",
                     ClientName = "PrOfESSOS Evil Test-Client",
                     ClientSecrets = { new Secret("79a42e2d-1bfd-44dd-9a0b-evil".Sha256()) },
                     // ClientSecrets = { new Secret("secret".Sha256()) },
@@ -63,7 +63,7 @@ namespace IdentityServer
                     //RequirePkce = true,
 
                     // where to redirect to after login
-                    RedirectUris = { "https://rp.professos/identityserver4/callback" },
+                    RedirectUris = { "https://evilrp.professos/identityserver4/callback" },
 
                     // where to redirect to after logout
                     // PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
