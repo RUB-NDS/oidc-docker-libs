@@ -160,8 +160,8 @@ clients:
       end_session: *sess
   identityserver4:
     issuer: 'https://identity-server4'
-    client_id: identityserver4
-    client_secret': 79a42e2d-1bfd-44dd-9a0b-0a7aa762fd5c
+    client_id: py-oidcrp
+    client_secret: 79a42e2d-1bfd-44dd-9a0b-0a7aa762fd5c
     redirect_uris:
       - "https://{domain}/authz_cb/identityserver4"
     post_logout_redirect_uris:
@@ -173,12 +173,15 @@ clients:
         - openid
         - profile
       token_endpoint_auth_method: client_secret_basic
-      response_mode: form_post
+      #response_mode: form_post
       allow:
         issuer_mismatch: True
       services:
         discovery: *disc
         authorization: *authz
+        accesstoken: *acctok
+        userinfo: *userinfo
+        end_session: *sess
 
 webserver:
   port: *port
