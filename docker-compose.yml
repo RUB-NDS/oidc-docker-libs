@@ -419,6 +419,7 @@ services:
       context: ./rp/py-oidcrp
       args:
         ISSUER: ${HONEST_OP_HOST}
+        ISSUER2: ${EVIL_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
         CLIENT_HOST: ${PY_OIDC_CLIENT_HOST}
     depends_on:

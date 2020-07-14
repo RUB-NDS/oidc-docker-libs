@@ -5,6 +5,7 @@ ARG HASH=17ab0e45853681d4333ae3e16b311a8936780cab
 ARG CONTROLLER_URL
 ARG CLIENT_HOST
 ARG ISSUER
+ARG ISSUER2
 
 RUN apt-get update \
     && apt-get install -y  --no-install-recommends \
@@ -27,7 +28,8 @@ RUN mv /usr/local/src/JWTConnect-Python-OidcRP/flask_rp/* . \
 RUN pip install -r requirements.txt
 
 COPY config/conf.yaml /app/
-RUN sed -i "s#ISSUER#$ISSUER#g" /app/conf.yaml
+RUN sed -i "s#HONESTSERVER#$ISSUER#g" /app/conf.yaml
+RUN sed -i "s#EVILSERVER#$ISSUER2#g" /app/conf.yaml
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" /app/conf.yaml
 
 # Allow professos
