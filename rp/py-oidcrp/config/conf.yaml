@@ -86,7 +86,7 @@ services: &id002
     kwargs: {}
 
 clients:
-  professos-honest:
+  https://HONESTSERVER/py-oidcrp:
     issuer: https://HONESTSERVER/py-oidcrp/
     redirect_uris:
       - "https://{domain}/authz_cb/professos"
@@ -109,7 +109,7 @@ clients:
       accesstoken: *acctok
       userinfo: *userinfo
       end_session: *sess
-  professos-evil:
+  https://EVILSERVER/py-oidcrp:
     issuer: https://EVILSERVER/py-oidcrp/
     redirect_uris:
       - "https://{domain}/authz_cb/professos"
