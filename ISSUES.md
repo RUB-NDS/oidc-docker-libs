@@ -73,11 +73,9 @@ RP
 
 ## node openid (express-openid-client)
 
-* Dynamic registration is not supported by express-openid
-    * /.well-known/openid-configuration will be not requested
+* Discovery and Dynamic registration is not supported
 * node does not respect HTTP_PROXY settings -> mitmproxy could not be used
-* only one provider could be configured. On site load provider should be up, else it runs into timeout after 2400ms. Site must be reloaded afterwards
-
+* Only one provider could be configured.
 
 ## angular-oauth2-oidc-client
 
