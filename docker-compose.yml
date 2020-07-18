@@ -459,7 +459,6 @@ services:
     build:
       context: rp/express-openid-client
       args:
-        ISSUER: ${HONEST_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
         CLIENT_HOST: ${EXPRESS_OPENID_CLIENT_HOST}
     depends_on:
@@ -477,6 +476,27 @@ services:
       - opnet
       - profnet
 
+  express-openid-client-prof:
+    build:
+      context: rp/express-openid-client
+      args:
+        ISSUER: ${EVIL_OP_HOST}
+        CONTROLLER_URL: ${CONTROLLER_HOST}
+        CLIENT_HOST: ${EXPRESS_OPENID_CLIENT_PROF_HOST}
+    depends_on:
+      - certs
+    volumes:
+      - certs:/certs:ro
+    env_file:
+      - .proxy_env
+    environment:
+      CA_DIR: ${CA_DIR}
+      CA_CERT: ${CA_CERT}
+      VIRTUAL_HOST: ${EXPRESS_OPENID_CLIENT_PROF_HOST}
+    networks:
+      - rpnet
+      - opnet
+      - profnet
 
   ###
   # phpOIDC RP
