@@ -15,6 +15,7 @@ export const RPLIST: RpList[] = [
   { id: 6, name: 'Py oidcrp', url: 'https://py-oidcrp' },
   { id: 7, name: 'Mod auth openidc', url: 'https://mod-auth-openidc' },
   { id: 8, name: 'Node openid', url: 'https://express-openid-client' },
+  { id: 9, name: 'Node openid professos', url: 'https://express-openid-client-prof' },
 ];
 
 
