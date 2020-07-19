@@ -33,6 +33,7 @@ bootstrap = Bootstrap()
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 
     bootstrap.init_app(app)
     auth.init_app(app)
