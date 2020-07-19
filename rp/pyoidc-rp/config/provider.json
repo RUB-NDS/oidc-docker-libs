@@ -1,8 +1,11 @@
 {
   "default": {
-    "issuer": "https://gravitee/am/profnet/oidc/"
-  },
-  "keycloak": {
     "issuer": "https://keycloak/auth/realms/master/"
+  },
+  "honestop": {
+    "issuer": "https://honest-idp.professos/pyoidc-rp/"
+  },
+  "evilop": {
+    "issuer": "https://attack-idp.professos/pyoidc-rp/"
   }
 }

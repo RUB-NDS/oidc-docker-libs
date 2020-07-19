@@ -28,14 +28,25 @@ def login():
              userinfo=user_session.userinfo)
     return redirect(url_for('main.profile'))
 
-@bp.route('/login2')
-@auth.oidc_auth('keycloak')     # must match with provider name in provider.json!
-def login2():
+
+@bp.route('/login-honest')
+@auth.oidc_auth('honestop')     # must match with provider name in provider.json!
+def loginhonest():
     user_session = UserSession(session)
     user_session.update(access_token=user_session.access_token,
                         id_token=user_session.id_token,
                         userinfo=user_session.userinfo)
     return redirect(url_for('main.profile'))
+
+@bp.route('/login-evil')
+@auth.oidc_auth('evilop')     # must match with provider name in provider.json!
+def loginevil():
+    user_session = UserSession(session)
+    user_session.update(access_token=user_session.access_token,
+                        id_token=user_session.id_token,
+                        userinfo=user_session.userinfo)
+    return redirect(url_for('main.profile'))
+
 
 @bp.route('/profile')
 def profile():
