@@ -85,4 +85,4 @@ RP
 ## angular-auth-oidc
 
 * No dynamic registration (/.well-known/openid-configuration loaded on each login attempt)
-
+* jwks Token needs optional field "kid" which is not provided by professos
