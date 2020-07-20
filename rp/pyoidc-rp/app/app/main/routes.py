@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, session, json
+from flask import render_template, redirect, url_for, session, request
 
 from app import auth
 from app.main import bp
@@ -38,6 +38,7 @@ def loginhonest():
                         userinfo=user_session.userinfo)
     return redirect(url_for('main.profile'))
 
+
 @bp.route('/login-evil')
 @auth.oidc_auth('evilop')     # must match with provider name in provider.json!
 def loginevil():
@@ -46,6 +47,15 @@ def loginevil():
                         id_token=user_session.id_token,
                         userinfo=user_session.userinfo)
     return redirect(url_for('main.profile'))
+
+
+@bp.route('/select', methods=['POST'])
+def selectLogin():
+    issuer = request.form.get('iss')
+    if issuer == "https://honest-idp.professos/py-oidcrp" :
+        return redirect(url_for('main.loginhonest'))
+    else:
+        return redirect(url_for('main.loginevil'))
 
 
 @bp.route('/profile')
