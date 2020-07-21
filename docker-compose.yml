@@ -402,7 +402,6 @@ services:
     depends_on:
       - certs
       - keycloak
-      - gravitee
     volumes:
       - certs:/certs:ro
     env_file:
