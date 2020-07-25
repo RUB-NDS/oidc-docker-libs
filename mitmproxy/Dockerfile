@@ -30,6 +30,7 @@ ENV HOME "/home/mitmproxy/"
 ENV MITMPROXY_PATH "/home/mitmproxy/.mitmproxy"
 
 EXPOSE 53/udp
+EXPOSE 8042
 
 WORKDIR "$HOME"
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

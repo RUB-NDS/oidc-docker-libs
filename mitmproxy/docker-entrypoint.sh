@@ -11,7 +11,8 @@ set -x
 RUN_CMD="mitmweb --web-iface 0.0.0.0 \
         --set web_open_browser=false --set stream_websockets=true \
         --ssl-insecure \
-        -s ${HOME}/scripts/noop.py"
+        --showhost \
+        -s ${HOME}/scripts/enhancedProfessos.py"
 
 # The following part was modified to generate Procfile with the commands
 # needed to run by forego
