@@ -1,5 +1,4 @@
 from mitmproxy import ctx, http
-import socket
 import threading
 import socketserver
 
