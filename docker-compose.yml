@@ -357,7 +357,7 @@ services:
     build:
       context: ./rp/angular-auth-oidc-sample-client
       args:
-        ISSUER: ${HONEST_OP_HOST}
+        ISSUER: ${EVIL_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
         CLIENT_HOST: ${ANGULAR_AUTH_CLIENT_HOST}
     depends_on:

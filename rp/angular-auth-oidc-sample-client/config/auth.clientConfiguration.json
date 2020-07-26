@@ -1,5 +1,5 @@
 {
-  "stsServer": " https://attack-idp.professos/angular-auth-oidc",
+  "stsServer": " https://ISSUER/angular-auth-oidc",
   "redirect_url": "https://CLIENT_HOST",
   "client_id": "angular-auth-oidc",
   "response_type": "id_token token",
