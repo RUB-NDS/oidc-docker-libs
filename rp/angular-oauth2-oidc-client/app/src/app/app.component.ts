@@ -30,17 +30,10 @@ export class AppComponent {
     return claims['name'];
   }
 
-  get claims(): object {
+  get claims(): string {
     const claims = this.oauthService.getIdentityClaims();
     if (!claims) { return null; }
-
-    const subClaims = {};
-    for (const key in claims) {
-      if (key === 'sub' || key === 'iss' || key === 'name') {
-        subClaims[key] = claims[key];
-      }
-    }
-    return subClaims;
+    return "{sub=" + claims['sub'] + ", iss=" + claims['iss'] + "}";
   }
 
   get idToken(): string {
