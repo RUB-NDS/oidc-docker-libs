@@ -52,7 +52,7 @@ def loginevil():
 @bp.route('/select', methods=['POST'])
 def selectLogin():
     issuer = request.form.get('iss')
-    if issuer == "https://honest-idp.professos/py-oidcrp" :
+    if issuer == "https://honest-idp.professos/pyoidc-rp":
         return redirect(url_for('main.loginhonest'))
     else:
         return redirect(url_for('main.loginevil'))
