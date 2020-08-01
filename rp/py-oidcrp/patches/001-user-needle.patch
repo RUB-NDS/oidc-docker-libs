@@ -1,0 +1,36 @@
+diff --git a/flask_rp/templates/opresult.html b/flask_rp/templates/opresult.html
+index 34bd7be..88bc492 100644
+--- a/flask_rp/templates/opresult.html
++++ b/flask_rp/templates/opresult.html
+@@ -26,6 +26,12 @@
+     {% endfor %}
+ </dl>
+ 
++<h3>Claim Info</h3>
++<dl>
++    {sub={{ userinfo.get('sub') }}, iss={{ iss }}}
++</dl>
++
++
+ {% if check_session_iframe is defined %}
+     <iframe id="rp_iframe" src="{{ status_check_iframe }}" hidden></iframe>
+     <iframe id="op_iframe" src="{{ check_session_iframe }}" hidden></iframe>
+@@ -35,4 +41,4 @@
+        value="Logout!" />
+ 
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+diff --git a/flask_rp/views.py b/flask_rp/views.py
+index 7ac5b99..1f5a33d 100644
+--- a/flask_rp/views.py
++++ b/flask_rp/views.py
+@@ -140,6 +140,7 @@ def finalize(op_hash, request_args):
+         kwargs['logout_url'] = "{}/logout".format(rp.service_context.base_url)
+ 
+         return render_template('opresult.html', endpoints=endpoints,
++                iss=iss,
+                                userinfo=res['userinfo'],
+                                access_token=res['token'],
+                                **kwargs)

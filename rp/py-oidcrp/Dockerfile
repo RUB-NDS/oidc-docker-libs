@@ -20,11 +20,16 @@ RUN git clone --branch=$BRANCH https://github.com/IdentityPython/JWTConnect-Pyth
     && cd JWTConnect-Python-OidcRP \
     && git reset --hard $HASH
 
+COPY patches/001-user-needle.patch JWTConnect-Python-OidcRP/
+RUN cd JWTConnect-Python-OidcRP \
+    && git apply 001-user-needle.patch
+
 COPY config/requirements.txt /app/
 WORKDIR /app
 
 RUN mv /usr/local/src/JWTConnect-Python-OidcRP/flask_rp/* . \
     && rm -rf /usr/local/src/*
+
 RUN pip install -r requirements.txt
 
 COPY config/conf.yaml /app/
