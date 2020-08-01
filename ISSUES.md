@@ -34,6 +34,7 @@ RP
 
 ## mod-auth-openidc
 * No discovery support (test_id=modauthopenidc)
+    * OPIV.createTestPlan("RP-TestPlan","test_id=modauthopenidc")
 * Dynamic registration works
 * gravitee and php-oidc-op could be used 
 * keycloak: Unrecognized field "frontchannel_logout_uri" (class org.keycloak.representations.oidc.OIDCClientRepresentation), not marked as ignorable
@@ -54,6 +55,7 @@ RP
 ## py-oidcrp
 
 * No discovery support (test_id=py-oidcrp)
+    * OPIV.createTestPlan("RP-TestPlan","test_id=py-oidcrp")
 * Dynamic registration works with keycloak (/.well-known/openid-configuration loaded on each login attempt)
 * only code authorization works
     * implicit/hybrid callback /ihf_cb does not work (python error)
@@ -62,6 +64,7 @@ RP
 ## pyoidc-rp
 
 * No discovery support (test_id=pyoidc-rp)
+    * OPIV.createTestPlan("RP-TestPlan","test_id=pyoidc-rp")
 * Dynamic registration does work with quick fix. Redirect uri from json is used without any sanity check.
     * Registration always done with Authorization Code Flow
     * Login could be done with Implicit Flow, but client must be reconfigured on op site to allow implicit flow
