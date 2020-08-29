@@ -32,7 +32,8 @@ RUN npm install
 
 COPY config/env* ./
 COPY config/server.js server.js
-
+COPY config/header.ejs views/partials/
+COPY config/public public
 
 RUN if [ -z "$ISSUER" ]; then cp env .env; else cp env.prof .env; sed -i "s#ISSUER_URL#$ISSUER#g" .env; fi
 RUN sed -i "s#CLIENT_HOST#$CLIENT_HOST#g" .env
