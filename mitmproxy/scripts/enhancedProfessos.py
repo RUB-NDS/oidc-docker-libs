@@ -12,6 +12,7 @@ class CMDDef:
     TYPE_REQUEST = "request"
 
     QUERY_SEARCH_REPLACE = "querySearchReplace"
+    JWKS_SPOOFING = "jwksSpoofing"
 
 
 class Intercept:
@@ -49,22 +50,37 @@ class InterceptReplaceCommand:
         return parse._replace(query=new_query).geturl()
 
 
-class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
+class InterceptJWKSCommand:
+    def __init__(self, uri, keys):
+        self.type = CMDDef.TYPE_REQUEST
+        self.action = CMDDef.JWKS_SPOOFING
+        self.uri = uri
+        self.keys = keys
+
+
+class ThreadedTCPRequestHandler(socketserver.StreamRequestHandler):
 
     def handle(self):
-        data = str(self.request.recv(1024), 'ascii')
+        data = str(self.rfile.readline(), 'ascii')  # recv until finish \n
         cmd = json.loads(data)
         if cmd.get("type") == CMDDef.TYPE_CLEAR:
             self.server.controller.clear()
-        elif cmd.get("type") == CMDDef.TYPE_REQUEST and cmd.get("action") == CMDDef.QUERY_SEARCH_REPLACE:
-            intercept = InterceptReplaceCommand(cmd.get('uri'), cmd.get('keyVal'))
-            self.server.controller.requestInterceptor = intercept
+        elif cmd.get("type") == CMDDef.TYPE_REQUEST:
+            self.server.controller.requestInterceptor = self.request_selection(cmd)
         elif cmd.get("type") == 'response':
             intercept = Intercept(cmd.get('search'), cmd.get('replace'))
             self.server.controller.responseInterceptor = intercept
 
         response = bytes("OK", 'ascii')
         self.request.sendall(response)
+
+    def request_selection(self, cmd):
+        intercept = None
+        if cmd.get("action") == CMDDef.QUERY_SEARCH_REPLACE:
+            intercept = InterceptReplaceCommand(cmd.get('uri'), cmd.get('keyVal'))
+        elif cmd.get("action") == CMDDef.JWKS_SPOOFING:
+            intercept = InterceptJWKSCommand(cmd.get('uri'), cmd.get('keys'))
+        return intercept
 
 
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
@@ -122,13 +138,31 @@ class ProfessosEnhancer(object):
         ctx.log.info("Enhancer listens on {}:{}".format(ip,port))
 
     def request(self, flow: http.HTTPFlow) -> None:
-        #ctx.log.info("Request {}".format(flow.request.pretty_url))
         for intercept in self.controller.requestInterceptor:
             if intercept.action == CMDDef.QUERY_SEARCH_REPLACE:
                 replaceUrl = intercept.replace(flow.request.pretty_url)
                 if replaceUrl:
                     flow.request.url = replaceUrl
                     ctx.log.info("Request Replaced: {}".format(flow.request.pretty_url))
+            elif intercept.action == CMDDef.JWKS_SPOOFING:
+                #ctx.log.info("Intercept URI: {} -> {}".format(flow.request.pretty_url, intercept.uri))
+                if flow.request.pretty_url == intercept.uri:
+                    ctx.log.info("{}".format({"keys": intercept.keys}))
+
+                    keys = {"keys": intercept.keys}
+                    header = {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Credentials": "true",
+                        "Access-Control-Allow-Methods": "*",
+                        "Access-Control-Allow-Headers": "origin, content-type, accept, authorization",
+                        "Content-Type": "application/json;charset=UTF-8",
+                    }
+
+                    flow.response = http.HTTPResponse.make(
+                        200,
+                        json.dumps(keys, indent=4, ensure_ascii=False).encode('utf-8'),
+                        header
+                    )
 
     def response(self, flow: http.HTTPFlow) -> None:
         for intercept in self.controller.responseInterceptor:
