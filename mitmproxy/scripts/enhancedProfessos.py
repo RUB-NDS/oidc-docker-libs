@@ -12,6 +12,7 @@ class CMDDef:
     TYPE_REQUEST = "request"
 
     QUERY_SEARCH_REPLACE = "querySearchReplace"
+    POST_JSON_SEARCH_REPLACE = "postJsonSearchReplace"
     JWKS_SPOOFING = "jwksSpoofing"
 
 
@@ -50,6 +51,26 @@ class InterceptReplaceCommand:
         return parse._replace(query=new_query).geturl()
 
 
+class InterceptPostJsonCommand:
+    def __init__(self, uri, keyVal):
+        self.type = CMDDef.TYPE_REQUEST
+        self.action = CMDDef.POST_JSON_SEARCH_REPLACE
+        self.uri = uri
+        self.keyVal = keyVal
+
+    def check(self, requestUri):
+        parse = urlparse(requestUri)
+        if self.uri != parse.netloc+parse.path:
+            return False
+        return True
+
+    def replace(self, content):
+        data = json.loads(content)
+        for key, value in self.keyVal.items():
+            data[key] = value
+        return json.dumps(data).encode('utf-8')
+
+
 class InterceptJWKSCommand:
     def __init__(self, uri, keys):
         self.type = CMDDef.TYPE_REQUEST
@@ -78,6 +99,8 @@ class ThreadedTCPRequestHandler(socketserver.StreamRequestHandler):
         intercept = None
         if cmd.get("action") == CMDDef.QUERY_SEARCH_REPLACE:
             intercept = InterceptReplaceCommand(cmd.get('uri'), cmd.get('keyVal'))
+        elif cmd.get("action") == CMDDef.POST_JSON_SEARCH_REPLACE:
+            intercept = InterceptPostJsonCommand(cmd.get('uri'), cmd.get('keyVal'))
         elif cmd.get("action") == CMDDef.JWKS_SPOOFING:
             intercept = InterceptJWKSCommand(cmd.get('uri'), cmd.get('keys'))
         return intercept
@@ -144,6 +167,12 @@ class ProfessosEnhancer(object):
                 if replaceUrl:
                     flow.request.url = replaceUrl
                     ctx.log.info("Request Replaced: {}".format(flow.request.pretty_url))
+            elif intercept.action == CMDDef.POST_JSON_SEARCH_REPLACE:
+                if intercept.check(flow.request.pretty_url):
+                    content = intercept.replace(flow.request.content)
+                    if content:
+                        flow.request.content = content
+                        ctx.log.info("Request Replaced: {}".format(flow.request.pretty_url))
             elif intercept.action == CMDDef.JWKS_SPOOFING:
                 #ctx.log.info("Intercept URI: {} -> {}".format(flow.request.pretty_url, intercept.uri))
                 if flow.request.pretty_url == intercept.uri:
