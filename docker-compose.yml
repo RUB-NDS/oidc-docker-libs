@@ -150,7 +150,7 @@ services:
     build:
       context: op/php-oidc-op
       args:
-        BRANCH: "default"
+        BRANCH: "master"
         SERVER_HOST: ${PHP_OIDC_OP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
     depends_on:
@@ -505,7 +505,7 @@ services:
     build:
       context: ./rp/php-oidc-rp
       args:
-        BRANCH: "default"
+        BRANCH: "master"
         CLIENT_HOST: ${PHP_OIDC_RP_HOST}
         CONTROLLER_URL: ${CONTROLLER_HOST}
     depends_on:

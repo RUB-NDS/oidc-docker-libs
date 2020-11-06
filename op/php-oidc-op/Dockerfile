@@ -1,13 +1,13 @@
 FROM php:7.4-fpm
 
 ARG BRANCH
-ARG REV=166
+ARG HASH=822d9c4
 ARG CONTROLLER_URL
 ARG SERVER_HOST
 
 RUN apt-get update \
     && apt-get install -y \
-       mercurial \
+       git \
        nginx \
     && docker-php-ext-install pdo pdo_mysql \
     && apt-get clean \
@@ -26,7 +26,9 @@ RUN pear channel-discover phpseclib.sourceforge.net \
 
 WORKDIR /var/www/
 RUN cd /tmp/ \
-    && hg clone -b $BRANCH -r $REV https://bitbucket.org/PEOFIAMP/phpoidc/
+    && git clone -b $BRANCH https://bitbucket.org/PEOFIAMP/phpoidc/
+WORKDIR /tmp/phpoidc/
+RUN git reset --hard $HASH
 COPY config/*.php /tmp/phpoidc/phpOp/
 
 RUN mv /tmp/phpoidc/phpOp /var/www/ \
