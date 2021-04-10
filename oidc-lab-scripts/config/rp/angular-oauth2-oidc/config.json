@@ -1,0 +1,5 @@
+{
+  "test_id": "angular-oauth2-oidc",
+  "discovery": false,
+  "pre_expose": true
+}

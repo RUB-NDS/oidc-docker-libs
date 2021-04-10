@@ -1,0 +1,9 @@
+{
+  "UrlClientTarget": "https://mod-auth-openidc/protected",
+  "InputFieldName": null,
+  "SeleniumScript": "var issuer = document.getElementsByName(\"iss\")[0];\nissuer.value = \"§browser-input-op_url§\";\ndocument.forms[0].submit();\n",
+  "FinalValidUrl": "https://mod-auth-openidc/protected/",
+  "HonestUserNeedle": "{sub=honest-op-test-subject, iss=https://honest-idp.professos/modauthopenidc}",
+  "EvilUserNeedle": "{sub=evil-op-test-subject, iss=https://attack-idp.professos/modauthopenidc}",
+  "ProfileUrl": "https://mod-auth-openidc/protected/"
+}

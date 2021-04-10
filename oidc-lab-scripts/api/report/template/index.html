@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="style/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <title>Report - {{title}}</title>
+</head>
+<body>
+<h1>Report for {{title}}</h1>
+
+
+<div class="accordion" id="testResults">
+    {% for result in results['TestReport']['TestStepResult'] %}
+    {% set testResult = result['Result'] %}
+    <div class="card">
+        <div class="card-header {% if testResult == 'PASS' %} btn-success {% elif testResult == 'FAIL' %} btn-danger  {% else %} btn-warning {% endif %} text-white"
+             id="heading{{ loop.index }}">
+            <h2 class="mb-0">
+                <button class="btn btn-link {% if testResult == 'PASS' %} btn-success {% elif testResult == 'FAIL' %} btn-danger  {% else %} btn-warning {% endif %} text-white text-left collapsed"
+                        type="button"
+                        data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="false"
+                        aria-controls="collapse{{ loop.index }}">
+			[#{{ loop.index - 1}}] {{ result['StepReference']['Name'] }} - {{ testResult }}
+                </button>
+            </h2>
+        </div>
+
+        <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}"
+             data-parent="#testResults">
+            <div class="card-body">
+                <div>
+                    {{ result['StepReference']['Description'] }}
+                </div>
+                <br>
+                <p>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseLogEntry"
+                            aria-expanded="false" aria-controls="collapseLogEntry">
+                        Show Details
+                    </button>
+                </p>
+{% if testResult != 'NOT_RUN' %}
+                <div class="collapse" id="collapseLogEntry">
+                    <div class="card card-body">
+                        {% for step in result['LogEntry'] %}
+                        <div class="card-header">
+                            Timestamp {{ step['Date'] }}
+                        </div>
+                        {% if step['Text'] %}
+                        <div class="card-body">
+                            {{ step['Text'] }}
+                        </div>
+                        {% endif %}
+                        {% if step['CodeBlock'] %}
+                        <div class="card-body">
+                            <table class="table">
+                                <tr>
+                                    <td>Description</td>
+                                    <td>{{ step['CodeBlock']['Description'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Content</td>
+                                    <td>{{ step['CodeBlock']['Content'] }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        {% endif %}
+                        {% if step['Screenshot'] %}
+                        <div class="card-body">
+                            <img src="data:image/png;base64,{{ step['Screenshot']['Data'] }}">
+                        </div>
+                        {% endif %}
+                        {% if step['HttpRequest'] %}
+                        <div class="card-body">
+                            <h4>Request</h4>
+                            <pre>
+                                <code>
+{% for key, value in step['HttpRequest'].items() -%}
+{% if key != 'Header' -%}
+{{ value }}
+{% else %}
+{% for v in value -%}
+{{ v['Key'] }} {{ v['value'] }}
+{% endfor %}
+{% endif -%}
+{% endfor -%}                    </code>
+                            </pre>
+                        </div>
+                        {% endif %}
+                        {% if step['HttpResponse'] %}
+                        <div>
+                            <h4>Response</h4>
+                            <pre>
+                                <code>
+{% for key, value in step['HttpResponse'].items() -%}
+{% if key != 'Header' -%}
+{{ value }}
+{% else %}
+{% for v in value -%}
+{{ v['Key'] }} {{ v['value'] }}
+{% endfor %}
+{% endif -%}
+{% endfor -%}                    </code>
+                            </pre>
+                        </div>
+                        {% endif %}
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+{% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="style/jquery/3.5.1/jquery-3.5.1.slim.min.js"></script>
+<script src="style/popper/1.16.1/popper.min.js"></script>
+<script src="style/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

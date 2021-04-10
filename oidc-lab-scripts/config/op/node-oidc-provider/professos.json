@@ -1,0 +1,14 @@
+{
+  "UrlOPTarget": "https://node-oidc-provider/",
+  "OPMetadata": "",
+  "AccessToken1": "",
+  "AccessToken2": "",
+  "User1Name": "user1",
+  "User2Name": "user2",
+  "User1Pass": "user1pass",
+  "User2Pass": "user2pass",
+  "LoginScript": "var username = document.getElementsByName(\"login\")[0];\nusername.value = \"§current_user_username§\";\n\nvar password = document.getElementsByName(\"password\")[0];\npassword.value = \"§current_user_password§\";\n\nif (typeof document.forms[0].submit === \"function\") {\n  document.forms[0].submit();\n} else {\n    // in the demo OP, the \"name\" attribute of\n    // of the submit button is \"submit\", clobbering\n    // the submit() function\n    document.forms[0].submit.click();\n}\n",
+  "ConsentScript": "if (typeof document.forms[0].submit === \"function\") {\n  document.forms[0].submit();\n} else {\n    // in the demo OP, the \"name\" attribute of\n    // of the submit button is \"submit\", clobbering\n    // the submit() function\n    document.forms[0].submit.click();\n}\n",
+  "Client1Config": "",
+  "Client2Config": ""
+}

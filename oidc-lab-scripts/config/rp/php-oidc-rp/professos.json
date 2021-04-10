@@ -1,0 +1,9 @@
+{
+  "UrlClientTarget": "https://php-oidc-rp/",
+  "InputFieldName": "identifier",
+  "SeleniumScript": "var opUrl = document.querySelector(\"input[name='identifier']\");\nopUrl.value = \"§browser-input-op_url§\";\nopUrl.form.submit();\n",
+  "FinalValidUrl": "https://php-oidc-rp/index.php/loginok",
+  "HonestUserNeedle": "{sub=honest-op-test-subject, iss=https://honest-idp.professos/CHANGE_TEST_ID}",
+  "EvilUserNeedle": "{sub=evil-op-test-subject, iss=https://attack-idp.professos/CHANGE_TEST_ID}",
+  "ProfileUrl": "https://php-oidc-rp/index.php/profile"
+}

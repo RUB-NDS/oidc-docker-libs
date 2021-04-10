@@ -1,0 +1,9 @@
+{
+  "UrlClientTarget": "https://angular-auth-oidc-client",
+  "InputFieldName": "",
+  "SeleniumScript": "document.getElementById('login-bt').click();",
+  "FinalValidUrl": "https://angular-auth-oidc-client",
+  "HonestUserNeedle": "{ \"name\": \"Honest User\", \"sub\": \"honest-op-test-subject\", \"preferred_username\": \"honest-user-name\", \"email\": \"user@honest.com\" }",
+  "EvilUserNeedle": "{ \"name\": \"Evil User\", \"sub\": \"evil-op-test-subject\", \"preferred_username\": \"evil-user-name\", \"email\": \"user@evil.com\" }",
+  "ProfileUrl": "https://angular-auth-oidc-client"
+}

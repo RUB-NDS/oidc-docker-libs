@@ -1,0 +1,14 @@
+{
+    "UrlOPTarget": "https://mitreid-server/oidc-server",
+    "OPMetadata": "",
+    "AccessToken1": "",
+    "AccessToken2": "",
+    "User1Name": "user1",
+    "User2Name": "user2",
+    "User1Pass": "user1pass",
+    "User2Pass": "user2pass",
+    "LoginScript": "",
+    "ConsentScript": "",
+    "Client1Config": "",
+    "Client2Config": ""
+}

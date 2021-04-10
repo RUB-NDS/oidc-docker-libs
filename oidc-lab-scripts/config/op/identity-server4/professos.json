@@ -1,0 +1,14 @@
+{
+  "UrlOPTarget": "https://identity-server4/",
+  "OPMetadata": "",
+  "AccessToken1": "",
+  "AccessToken2": "",
+  "User1Name": "alice",
+  "User2Name": "bob",
+  "User1Pass": "alice",
+  "User2Pass": "bob",
+  "LoginScript": "var username = document.getElementById(\"Username\");\nusername.value = \"§current_user_username§\";\n\nvar password = document.getElementById(\"Password\");\npassword.value = \"§current_user_password§\";\n\nvar buttons = document.getElementsByName(\"button\");\n for (i = 0; i < buttons.length; i++) {\n if (buttons[i].value == \"login\") {\nbuttons[i].click();\n }\n}\n",
+  "ConsentScript": "var buttons = document.getElementsByName(\"button\");\n for (i = 0; i < buttons.length; i++) { if (buttons[i].value == \"yes\") { buttons[i].click();\n }}\n",
+  "Client1Config": "{\"client_id\": \"honest-idp\", \"client_secret\": \"79a42e2d-1bfd-44dd-9a0b-honest\" }",
+  "Client2Config": "{\"client_id\": \"evil-idp\",   \"client_secret\": \"79a42e2d-1bfd-44dd-9a0b-evil\"  }"
+}

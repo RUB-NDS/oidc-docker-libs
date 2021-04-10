@@ -1,0 +1,5 @@
+{
+  "test_id": "node-openid",
+  "discovery": false,
+  "pre_expose": true
+}
