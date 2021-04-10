@@ -1,4 +1,4 @@
-FROM mitmproxy/mitmproxy
+FROM mitmproxy/mitmproxy:6.0.2
 
 # Based on artemkloko/docker-mitm-nginx-proxy-companion
 

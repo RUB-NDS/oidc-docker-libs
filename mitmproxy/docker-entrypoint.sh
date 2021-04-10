@@ -8,7 +8,7 @@ cat ${CA_DIR}/${CA_KEY} ${CA_DIR}/${CA_CERT} > ${MITMPROXY_PATH}/mitmproxy-ca.pe
 # for script examples https://github.com/mitmproxy/mitmproxy/tree/master/examples
 
 set -x
-RUN_CMD="mitmweb --web-iface 0.0.0.0 \
+RUN_CMD="mitmweb --web-host 0.0.0.0 \
         --set web_open_browser=false --set stream_websockets=true \
         --ssl-insecure \
         --showhost \
