@@ -50,7 +50,7 @@ RUN CHROMEDRIVER_VERSION=$(dpkg -s chromium | grep ^Version: | cut -d " " -f2 | 
  && mkdir -p /opt/bin/ \
  && unzip chromedriver_linux64.zip -d /opt/bin/ \
  && rm -f chromedriver_linux64.zip \
- && ln /opt/bin/chromedriver /usr/bin/chromedriver
+ && ln -s /opt/bin/chromedriver /usr/bin/chromedriver
 
 ###
 # setup wildfly as per https://github.com/jboss-dockerfiles/wildfly/blob/master/Dockerfile
