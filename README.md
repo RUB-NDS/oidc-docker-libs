@@ -16,7 +16,7 @@ docker-compose up
 ## Use proxy
 
 - Configure Browser to use Proxy -> http://localhost:8080
-- (optional) Get generated CA oidc-ca.crt from docker volume certs (/var/lib/docker/volumes/oidc-lab_certs/_data/oidc-ca.crt)
+- (optional) Get generated CA oidc-ca.crt from docker volume certs (/var/lib/docker/volumes/oidc-docker-libs_certs/_data/oidc-ca.crt)
     and add it to your browser trust store to avoid self signed ca warning
 - Sites could be reached without further host file manipulation e.g. https://openid.professos
 
