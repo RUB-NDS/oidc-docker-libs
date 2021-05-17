@@ -1,6 +1,14 @@
 #!/bin/sh
 set -e
 
+if [ ! -z CA_DIR ] && [ ! -z CA_CERT ]; then
+  while [ ! -f "${CA_DIR}/${CA_CERT}" ]; do echo "ca cert not generated yet - sleeping"; sleep 1; done;
+fi;
+
+if [ ! -z CA_DIR ] && [ ! -z CA_KEY ]; then
+  while [ ! -f "${CA_DIR}/${CA_KEY}" ]; do echo "ca key not generated yet - sleeping"; sleep 1; done;
+fi;
+
 mkdir -p $MITMPROXY_PATH
 chown mitmproxy:mitmproxy "$MITMPROXY_PATH"
 cat ${CA_DIR}/${CA_KEY} ${CA_DIR}/${CA_CERT} > ${MITMPROXY_PATH}/mitmproxy-ca.pem
