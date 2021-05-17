@@ -1,5 +1,7 @@
 # oidc-lab
 
+![Lab Overview](docs/images/lab.svg)
+
 ## Minimum system requirements
 
 - 4 CPU cores
