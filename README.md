@@ -1,6 +1,4 @@
-# oidc-lab
-
-![Lab Overview](docs/images/lab.svg)
+# oidc-docker-libs
 
 ## Minimum system requirements
 
@@ -12,6 +10,16 @@
 
 ```
 docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN}
+docker-compose up
+```
+
+## Reset to default settings
+
+OPs which uses SQL databases are configured without a persistent database.
+Database is always recreated with a sql dump.
+To reset the complete lab use:
+```
+docker-compose down
 docker-compose up
 ```
 
@@ -29,9 +37,17 @@ Web interface could be found at http://localhost:8081
 
 ## The Lab
 
-https://lab
+![Lab Overview](docs/images/lab.svg)
 
-### Professos
+Landing page (https://lab) can be reached after connection to the proxy.
+
+[PrOfESSOS](https://github.com/RUB-NDS/PrOfESSOS) as our open source implementation for fully automated 
+Evaluation-as-a-Service for SSO can is located at https://professos/
+
+[OpenID Provider in OPNet](docs/OP.md)
+
+[Relying Parties in RPNet](docs/RP.md)
  
-https://openid.professos/
+
+
 
