@@ -1,36 +1,3 @@
-# OP
-
-## Gravitee 
-* Professos fails because of missing subject_types_supported
-    * workaround added to professos (use public if required subject_types_supported is not defined)
-``` 
-subject_types_supported was removed with 3.0.0
-https://github.com/gravitee-io/issues/issues/3614
-```
-
-## Keycloak
-
-* No issues found
-
-## mitreid-server
-
-* No issues found
-
-## php-oidc-op
-
-* No issues found
-
-## node-oidc-provider
-
-* login could be done with any user/password combination and does provide static configured Account John
-
-## identity-server4
-
-* No Dynamic Registration
-
-
-RP
-========================================================================================================================
 
 ## mod-auth-openidc
 * No discovery support (test_id=modauthopenidc)
