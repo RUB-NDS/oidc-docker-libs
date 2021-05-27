@@ -42,7 +42,7 @@ Web interface could be found at http://localhost:8081
 Landing page (https://lab) can be reached after connection to the proxy.
 
 [PrOfESSOS](https://github.com/RUB-NDS/PrOfESSOS) as our open source implementation for fully automated 
-Evaluation-as-a-Service for SSO can is located at https://professos/
+Evaluation-as-a-Service for SSO is located at https://professos/
 
 [OpenID Provider in OPNet](docs/OP.md)
 
