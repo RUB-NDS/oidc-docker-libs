@@ -6,7 +6,7 @@ FROM maven:3.6.3-jdk-11 AS build
 ARG gitbranch
 ARG GITHUB_TOKEN
 
-RUN git clone -b $gitbranch https://${GITHUB_TOKEN}:x-oauth-basic@github.com/RUB-NDS/PrOfESSOS-Development.git /professos
+RUN git clone -b $gitbranch https://github.com/RUB-NDS/PrOfESSOS.git /professos
 RUN mkdir -p /home/app
 RUN cp -R /professos/* /home/app/
 RUN mvn -f /home/app/pom.xml clean package
