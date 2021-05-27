@@ -9,7 +9,7 @@
 ## Build & Run
 
 ```
-docker-compose build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN}
+docker-compose build
 docker-compose up
 ```
 
